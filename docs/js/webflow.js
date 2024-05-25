@@ -53372,9 +53372,9 @@ spurious results.`);
   shareButton.addEventListener("click", (e) => { 
     if (navigator.share) {
       navigator.share({
-          title: 'Web Share API Draft',
+          title: 'Yerushalmi',
           text: 'Take a look at this spec!',
-          url: 'https://wicg.github.io/web-share/#share-method',
+          url: window.location.href,
         })
         .then(() => console.log('Successful share'))
         .catch((error) => console.log('Error sharing', error));
@@ -53386,9 +53386,9 @@ spurious results.`);
   shareButtonFooter.addEventListener("click", (e) => { 
     if (navigator.share) {
       navigator.share({
-          title: 'Web Share API Draft',
+          title: 'Yerushalmi',
           text: 'Take a look at this spec!',
-          url: 'https://wicg.github.io/web-share/#share-method',
+          url: window.location.href,
         })
         .then(() => console.log('Successful share'))
         .catch((error) => console.log('Error sharing', error));

@@ -127,8 +127,8 @@ function processCsv() {
             fs.writeFileSync(filePath, html);
 
             // Add link to the index file
-            const fileUrl = `www.yerushalmi.online/${fileName}`;
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(fileUrl)}&size=100x100`;
+            const fileUrl = `https://www.yerushalmi.online/${fileName}`;
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(fileUrl)}&size=150x150`;
             const rowData = columns.map(column => `<td>${row[column]}</td>`).join('');
             indexHtml.push(`
                 <tr>
