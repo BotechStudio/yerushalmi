@@ -17,7 +17,7 @@ const ftpDirPath = '';
 const localCsvPath = 'data.csv';
 
 // Directory to save generated HTML files
-const outputDir = 'output';
+const outputDir = 'docs';
 
 // Read the HTML template
 const template = fs.readFileSync('template.html', 'utf-8');
