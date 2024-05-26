@@ -63,7 +63,6 @@ function createRoughVideoUrl(vendorStockNumber) {
 
 // Function to fix striping 
 function stripHttps(url) {
-    // Extract the substring from the 'L' and the next 5 characters
     const result = `${url.substring(8)}`;
 
     return result;
@@ -118,7 +117,8 @@ function processCsv() {
         .on('data', (row) => {
             // Replace Rough Video URL
             row['Rough Video'] = createRoughVideoUrl(row['VendorStockNumber']);
-            row['Certificate Url'] = stripHttps(row['Certificate Url']);
+            // row['Certificate Url'] = stripHttps(row['Certificate Url']);
+            // row['Certificate Url'] = (row['Certificate Url']);
 
             // Generate HTML for each row
             const html = generateHtml(row, columns);
