@@ -10,7 +10,7 @@ const mockAdapterOptions = {
 	delayResponse: 0
 };
 const baseURL = '/mock-api';
-const mock = new ExtendedMockAdapter(axios, mockAdapterOptions, baseURL);
+const mock = new ExtendedMockAdapter(axios, mockAdapterOptions, baseURL) || {};
 
 function MockAdapterProvider(props) {
 	const { enabled = true, children } = props;
@@ -20,7 +20,7 @@ function MockAdapterProvider(props) {
 	useEffect(() => {
 		const setupAllMocks = () => {
 			[authApiMocks].forEach((mockSetup) => {
-				mockSetup(mock);
+				mockSetup(mock || {});
 			});
 		};
 

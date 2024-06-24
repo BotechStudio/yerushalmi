@@ -9,11 +9,15 @@ import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import clsx from 'clsx';
 import Button from '@mui/material/Button';
-import { useDeleteECommerceProductsMutation, useGetECommerceProductsQuery } from '../ECommerceApi';
+import { useGetECommerceProductsQuery } from './ECommerceApi';
+// import { useDeleteECommerceProductsMutation, useGetECommerceProductsQuery } from './ECommerceApi';
 
 function ProductsTable() {
-	const { data: products, isLoading } = useGetECommerceProductsQuery();
-	const [removeProducts] = useDeleteECommerceProductsMutation();
+	const { data: products_api, isLoading } = useGetECommerceProductsQuery();
+	const products = [];
+	// const isLoading = false;
+	console.log('api', products_api);
+	// const [removeProducts] = useDeleteECommerceProductsMutation();
 	const columns = useMemo(
 		() => [
 			{
@@ -133,7 +137,7 @@ function ProductsTable() {
 			elevation={0}
 		>
 			<DataTable
-				data={products}
+				data={products || []}
 				columns={columns}
 				renderRowActionMenuItems={({ closeMenu, row, table }) => [
 					<MenuItem

@@ -16,7 +16,7 @@ function ProductsHeader() {
 				initial={{ x: -20 }}
 				animate={{ x: 0, transition: { delay: 0.2 } }}
 			>
-				<Typography className="text-24 md:text-32 font-extrabold tracking-tight">Products</Typography>
+				<Typography className="text-24 md:text-32 font-extrabold tracking-tight">Diamonds</Typography>
 			</motion.span>
 
 			<div className="flex flex-1 items-center justify-end space-x-8">
@@ -34,7 +34,7 @@ function ProductsHeader() {
 						size={isMobile ? 'small' : 'medium'}
 					>
 						<FuseSvgIcon size={20}>heroicons-outline:plus</FuseSvgIcon>
-						<span className="mx-4 sm:mx-8">Add</span>
+						<span className="mx-4 sm:mx-8">Import CSV</span>
 					</Button>
 				</motion.div>
 			</div>
