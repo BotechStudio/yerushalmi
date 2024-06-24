@@ -17,11 +17,6 @@ const routes = [
 	...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),
 	{
 		path: '/',
-		element: <Navigate to="/example" />,
-		auth: settingsConfig.defaultAuth
-	},
-	{
-		path: '/',
 		element: <Navigate to="/diamonds" />,
 		auth: settingsConfig.defaultAuth
 	},

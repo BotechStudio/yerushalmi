@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import ProductsHeader from './ProductsHeader';
 import ProductsTable from './ProductsTable';
+import { display } from '@mui/system';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {
@@ -13,7 +14,9 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 		borderStyle: 'solid',
 		borderColor: theme.palette.divider
 	},
-	'& .FusePageSimple-content': {},
+	'& .FusePageSimple-content': {
+		display: 'block'
+	},
 	'& .FusePageSimple-sidebarHeader': {},
 	'& .FusePageSimple-sidebarContent': {}
 }));

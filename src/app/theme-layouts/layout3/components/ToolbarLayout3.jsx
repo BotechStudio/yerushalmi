@@ -45,21 +45,21 @@ function ToolbarLayout3(props) {
 
 					<div className="flex flex-1">
 						<Hidden smDown>
-							<NavigationSearch
+							{/* <NavigationSearch
 								className="mx-16 lg:mx-24"
 								variant="basic"
-							/>
+							/> */}
 						</Hidden>
 					</div>
 
 					<div className="flex h-full items-center overflow-x-auto px-8 md:px-0">
-						<Hidden smUp>
+						{/* <Hidden smUp>
 							<NavigationSearch />
-						</Hidden>
-						<LanguageSwitcher />
+						</Hidden> */}
+						{/* <LanguageSwitcher /> */}
 						<AdjustFontSize />
 						<FullScreenToggle />
-						<QuickPanelToggleButton />
+						{/* <QuickPanelToggleButton /> */}
 						<UserMenu />
 					</div>
 				</Toolbar>

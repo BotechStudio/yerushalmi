@@ -32,7 +32,6 @@ function LanguageSwitcher() {
 	return (
 		<>
 			<Button
-				style={{display: "none"}}
 				className="h-40 w-64"
 				onClick={langMenuClick}
 			>

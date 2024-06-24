@@ -37,6 +37,23 @@ function ProductsHeader() {
 						<span className="mx-4 sm:mx-8">Import CSV</span>
 					</Button>
 				</motion.div>
+				<motion.div
+					className="flex flex-grow-0"
+					initial={{ opacity: 0, x: 20 }}
+					animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
+				>
+					<Button
+						className=""
+						variant="contained"
+						color="secondary"
+						component={NavLinkAdapter}
+						to="/apps/e-commerce/products/new"
+						size={isMobile ? 'small' : 'medium'}
+					>
+						<FuseSvgIcon size={20}>heroicons-outline:upload</FuseSvgIcon>
+						<span className="mx-4 sm:mx-8">Sync Selected</span>
+					</Button>
+				</motion.div>
 			</div>
 		</div>
 	);
