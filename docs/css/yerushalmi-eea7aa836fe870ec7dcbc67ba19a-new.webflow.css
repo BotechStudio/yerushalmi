@@ -2579,7 +2579,13 @@ ul {
   overflow: hidden; /* Ensure the image doesn't overflow the container */
 }
 
-.glowing-wrapper-button img {
+.tracer {
+  width: 85%;
+  height: 85%;
+  object-fit: cover; /* Ensures the image covers the entire anchor element */
+  display: block;
+}
+.logo {
   width: 60%;
   height: 60%;
   object-fit: cover; /* Ensures the image covers the entire anchor element */
