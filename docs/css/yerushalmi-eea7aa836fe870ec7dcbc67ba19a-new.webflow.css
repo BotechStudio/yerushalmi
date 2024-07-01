@@ -2542,26 +2542,56 @@ ul {
   display: none;
 }
 
-.glowing-wrapper-button {
+/* .glowing-wrapper-button {
   margin-bottom: 20px;
   height: 10px;
   width: 90px;
-  /* background-color: darkgray; */
   border-radius: 62.5rem;
   z-index: 1;
   color: #fff;
   letter-spacing: -.01em;
   background: linear-gradient(to bottom, rgba(71, 63, 63, 0.8), rgba(0, 0, 0, 0.8));
-  /* background: linear-gradient(to bottom, rgb(71, 63, 63), black);  */
   border: 1px solid rgb(22, 20, 20);
   border-radius: 10px;
-  /* padding: .5rem 1.5rem; */
-  /* font-size: .88rem; */
   line-height: 1.42;
   text-decoration: none;
   position: relative;
   padding: 1.5rem; /* Adjust padding as needed */
+  /* display: inline-block;
+} */ */
+
+.glowing-wrapper-button {
+  margin-bottom: 20px;
+  height: 10px; /* Adjust height as needed */
+  width: 50px; /* Adjust width as needed */
+  border-radius: 62.5rem;
+  z-index: 1;
+  color: #fff;
+  letter-spacing: -.01em;
+  background: linear-gradient(to bottom, rgba(71, 63, 63, 0.8), rgba(0, 0, 0, 0.8));
+  border: 1px solid rgb(22, 20, 20);
+  border-radius: 10px;
+  line-height: 1.42;
+  text-decoration: none;
+  position: relative;
+  padding: 0; /* Remove padding to avoid spacing issues */
   display: inline-block;
+  overflow: hidden; /* Ensure the image doesn't overflow the container */
+}
+
+.glowing-wrapper-button img {
+  width: 60%;
+  height: 60%;
+  object-fit: cover; /* Ensures the image covers the entire anchor element */
+  display: block;
+}
+
+
+.glowing-wrapper-button img {
+  /* width: 50%;
+  height: 50%; */
+  /* object-fit: cover; Ensures the image covers the entire anchor element */
+  /* display: block; */
 }
 
 
