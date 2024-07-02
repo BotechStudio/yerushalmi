@@ -2582,6 +2582,11 @@ ul {
   display: inline-block;
   overflow: hidden; /* Ensure the image doesn't overflow the container */
 }
+.image-link-container {
+  position: relative;
+  display: inline-block; /* Ensure the container only takes up as much space as needed */
+}
+
 
 .tracer {
   width: 85%;
@@ -2590,11 +2595,13 @@ ul {
   display: block;
 }
 .logo {
+  margin: 10px;
   width: 60%;
   height: 60%;
   object-fit: cover; /* Ensures the image covers the entire anchor element */
   display: block;
 }
+
 
 
 .glowing-wrapper-button img {
@@ -3344,7 +3351,7 @@ ul {
   }
 
   .image-6 {
-    /* margin-left: 50px; */
+    /* margin-left: -6px; */
     width: 350px;
     opacity: .2;
     /* margin-top: -80px; */
@@ -3360,7 +3367,7 @@ ul {
   }
 
   .bold-text-2 {
-    font-size: 34px;
+    font-size: 25px;
     line-height: 45px;
   }
 
