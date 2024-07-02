@@ -1,3 +1,5 @@
+
+
 :root {
   --black: #000;
   --lato: Lato, sans-serif;
@@ -14,6 +16,7 @@
 }
 
 .w-layout-grid {
+  background-color: black;
   grid-row-gap: 16px;
   grid-column-gap: 16px;
   grid-template-rows: auto auto;
@@ -1999,6 +2002,7 @@ ul {
 }
 
 .footer {
+  background-color: black;
   padding: 80px 20px 20px;
   overflow: hidden;
 }
@@ -2463,7 +2467,7 @@ ul {
 }
 
 .image-6 {
-  opacity: .4;
+  opacity: .2;
   max-width: 100%;
   margin-top: -60px;
   padding-top: 0;
@@ -2693,6 +2697,7 @@ ul {
 }
 
 .paragraph-1 {
+  background-color: black;
   text-align: left;
   align-items: center;
   font-size: 18px;
@@ -2772,7 +2777,11 @@ ul {
   width: 24px;
 }
 
-
+.div-logo{
+  margin-top: 50px;
+  display: flex;
+  
+}
 @media screen and (max-width: 991px) {
   .primary-button {
     justify-content: center;
@@ -2940,6 +2949,7 @@ ul {
   }
 
   .footer {
+    background-color: black;
     padding-top: 40px;
     padding-bottom: 40px;
   }
@@ -3186,6 +3196,7 @@ ul {
   }
 
   .footer {
+    background-color: black;
     padding: 0 10px 40px;
   }
 
@@ -3333,10 +3344,15 @@ ul {
   }
 
   .image-6 {
-    margin-left: 50px;
-    width: 300px;
-    opacity: .4;
-    margin-top: -80px;
+    /* margin-left: 50px; */
+    width: 350px;
+    opacity: .2;
+    /* margin-top: -80px; */
+  }
+
+  .div-logo{
+    margin-top: 0px;
+    display: flex;
   }
 
   .hero-section-2 {
@@ -3376,6 +3392,7 @@ ul {
   }
 
   .paragraph-1 {
+    background-color: black;
     font-size: 18px;
     font-weight: 300;
     line-height: 1.4em;
