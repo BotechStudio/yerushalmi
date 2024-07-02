@@ -2784,21 +2784,9 @@ ul {
   width: 24px;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-90px); /* Optional: adds a slight upward movement */
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0); /* Optional: adds a slight upward movement */
-  }
-}
-
 .div-logo{
   margin-top: 50px;
   display: flex;
-  animation: fadeIn 3s ease-in-out;
   
 }
 @media screen and (max-width: 991px) {
