@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import clsx from "clsx";
 import Button from "@mui/material/Button";
 import fetchData from "src/api/fetchData";
-<<<<<<< HEAD
 import { saveAs } from "file-saver";
 import QRCode from "qrcode.react";
 
@@ -533,8 +532,6 @@ const generateHtml = (diamond) => {
   const blob = new Blob([template], { type: "text/html" });
   saveAs(blob, `${diamond.VendorStockNumber}_new.html`);
 };
-=======
->>>>>>> 98254c3f885e85c193b3b0c56b4ccc4625b8df4e
 
 function ProductsTable() {
   const [products, setProducts] = useState([]);
@@ -653,7 +650,6 @@ function ProductsTable() {
         accessorKey: "Weight",
         header: "Weight",
       },
-<<<<<<< HEAD
       // Add the new column for generating HTML
       {
         accessorKey: "GenerateHTML",
@@ -676,8 +672,6 @@ function ProductsTable() {
           <QRCode value={row.original.VendorStockNumber} size={64} />
         ),
       },
-=======
->>>>>>> 98254c3f885e85c193b3b0c56b4ccc4625b8df4e
     ],
     []
   );

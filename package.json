@@ -35,11 +35,15 @@
         "clsx": "2.1.0",
         "core-js": "3.35.0",
         "crypto-js": "4.2.0",
+        "csv-parser": "^3.0.0",
         "date-fns": "2.30.0",
         "draft-js": "0.11.7",
         "draftjs-to-html": "0.9.1",
+        "file-saver": "^2.0.5",
         "firebase": "^10.10.0",
         "framer-motion": "10.18.0",
+        "fs": "^0.0.1-security",
+        "ftp": "^0.3.10",
         "google-map-react": "2.2.1",
         "history": "5.3.0",
         "i18next": "23.7.16",
@@ -56,6 +60,7 @@
         "perfect-scrollbar": "1.5.5",
         "prismjs": "1.29.0",
         "prop-types": "15.8.1",
+        "qrcode.react": "^3.1.0",
         "qs": "6.11.2",
         "react": "18.2.0",
         "react-apexcharts": "1.4.1",
@@ -88,10 +93,7 @@
         "styled-components": "6.1.8",
         "stylis": "4.3.1",
         "stylis-plugin-rtl": "2.1.1",
-        "zod": "3.22.4",
-        "csv-parser": "^3.0.0",
-        "fs": "^0.0.1-security",
-        "ftp": "^0.3.10"
+        "zod": "3.22.4"
     },
     "peerDependencies": {
         "autoprefixer": "10.4.16",
@@ -145,8 +147,8 @@
         "tailwindcss": "3.3.2",
         "util": "0.12.5",
         "vite": "^5.0.12",
-        "vite-plugin-svgr": "4.2.0",
-        "vite-jsconfig-paths": "2.0.1"
+        "vite-jsconfig-paths": "2.0.1",
+        "vite-plugin-svgr": "4.2.0"
     },
     "scripts": {
         "start": "npm run dev",
