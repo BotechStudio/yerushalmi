@@ -1,18 +1,4 @@
-import { useMemo, useEffect, useState } from "react";
-import DataTable from "app/shared-components/data-table/DataTable";
-import FuseLoading from "@fuse/core/FuseLoading";
-import { Chip, ListItemIcon, MenuItem, Paper } from "@mui/material";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-import { Link } from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import clsx from "clsx";
-import Button from "@mui/material/Button";
-import fetchData from "src/api/fetchData";
-import { saveAs } from "file-saver";
-import QRCode from "qrcode.react";
-
-const generateHtml = (diamond) => {
-  const template = `<!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  --><!--  Last Published: Sat May 25 2024 10:13:16 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://www.webflow.com  --><!--  Last Published: Sat May 25 2024 10:13:16 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6651821bee3ca6b61da6b293" data-wf-site="6651821bee3ca6b61da6b28f">
 <head>
   <meta charset="utf-8">
@@ -211,36 +197,8 @@ const generateHtml = (diamond) => {
           <p class="paragraph-4">${diamond.Polish}</p>
           <p class="paragraph-4">${diamond.Symmetry}</p>
           <p id="w-node-_6a2e1891-d51c-40d8-9a0e-f44a621db5f1-1da6b293" class="paragraph-4">${diamond.FluorescenceIntensity}</p>
-          <!-- <p id="w-node-f2291cea-3775-7d7f-8649-195213fe504a-1da6b293" class="paragraph-4">{{Clarity}}</p> -->
         </div>
       </div> 
-        <!-- <a href="https://www.tracr.com/#:~:text=Tracr%E2%84%A2%20is%20the%20world's,along%20the%20diamond%20value%20chain." target="_blank" class="glowing-wrapper-button w-inline-block">
-          <div class="button-text-2">Tracer</div>
-        </a> -->
-<!-- 
-        <div class="div-logo"><a style="margin-left: 50px;" href="{{Certificate Url}}" target="_blank" class="glowing-wrapper-button w-inline-block">
-          <img class="logo" src="../docs/images/GIA_Logo_CMYK_tran.png" alt="GIA Logo">
-      </a>
-      <div style="width: 20%;"></div>
-      <a style="margin-bottom: 20px;" href="https://www.tracr.com/#:~:text=Tracr%E2%84%A2%20is%20the%20world's,along%20the%20diamond%20value%20chain." target="_blank" class="glowing-wrapper-button w-inline-block">
-        <img class="tracer" src="../docs/images/logo-tracer-new.png"  alt="Tracer Logo">
-    </a>    
-    </div> -->
-
-    <!-- <div class="div-logo">
-      <div style="width: 20%;"></div>
-      <a href="{{Certificate Url}}" target="_blank" class="glowing-wrapper-button w-inline-block" style="margin-left: 50px;">
-        <img class="logo" src="../docs/images/GIA_Logo_CMYK_tran.png" alt="GIA Logo">
-      </a>
-    
-      <div style="width: 10%;"></div>
-      
-      <a href="https://www.tracr.com/#:~:text=Tracr%E2%84%A2%20is%20the%20world's,along%20the%20diamond%20value%20chain." target="_blank" class="glowing-wrapper-button w-inline-block" style="margin-bottom: 20px;">
-        <img class="tracer" src="../docs/images/logo-tracer-new.png" alt="Tracer Logo">
-      </a>
-      <div style="width: 20%;"></div>
-    </div> -->
-
 
     <div class="div-logo">
       <div style="width: 20%;"></div>
@@ -261,14 +219,6 @@ const generateHtml = (diamond) => {
     
       <div style="width: 20%;"></div>
     </div>
-    
-    
-
-      <!-- <div class="div-block-logo">
-          <img height="50px" src="../docs/images/logo-tracer-new.png" alt="foy6hIpvrfg52xatp3bhdemo" class="img_logo"> </img>
-          <p style="margin-top: 15px; margin-right: 30px;">foy6hIpvrfg52xatp3bhdemo</p>
-        </div> -->
-      
         <div id="w-node-_0d3249ba-8ae3-4b44-27ba-6e1bc1fb58fb-1da6b293" class="div-block-9 polish">
           <div class="paragraph-1">Your polished diamond is the product of nature&#x27;s wonders, combined with human artistry. <br>Every polished diamond follows its own unique path, from Mine to Brilliance.</div>
         </div>
@@ -382,9 +332,6 @@ const generateHtml = (diamond) => {
           <div class="glowing-wrapper-borders-masker">
             <div class="glowing-wrapper-borders"></div>
           </div>
-          <!-- <a href="{{Certificate Url}}" target="_blank" class="glowing-wrapper-button w-inline-block">
-            <div class="button-text-2">View GIA Certificate</div>
-          </a> -->
         </div>
       </div>
     </section>
@@ -438,7 +385,7 @@ const generateHtml = (diamond) => {
           </div>
         </div>
         <div id="w-node-_3b1461f1-d10e-eedb-fd8f-a1243803336b-1da6b293" class="div-block-9">
-          <div class="paragraph-1">On <b>${diamond.ROUGH_DATE}</b>, this <b>${diamond.ROUGH_CT} Ct</b> rough diamond was discovered in the heart of <b>{{Country of Origin}}’s rich earth</b>,<br>offering a promise of a unique, one-of-a-kind beauty.</div>
+          <div class="paragraph-1">On <b>${diamond.ROUGH_DATE}</b>, this <b>${diamond.ROUGH_CT} Ct</b> rough diamond was discovered in the heart of <b>Botswana’s rich earth</b>,<br>offering a promise of a unique, one-of-a-kind beauty.</div>
         </div>
       </div>
     </section>
@@ -528,213 +475,3 @@ const generateHtml = (diamond) => {
   <script src="js/webflow.js" type="text/javascript"></script>
 </body>
 </html>
-`;
-  const blob = new Blob([template], { type: "text/html" });
-  saveAs(blob, `${diamond.VendorStockNumber}_new.html`);
-};
-
-function ProductsTable() {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await fetchData();
-        console.log("Fetched data in App:", data);
-        setProducts(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error in App useEffect:", error);
-        setIsLoading(false);
-      }
-    };
-    getData();
-  }, []);
-
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: "CertificateUrl",
-        header: "Certificate Url",
-        Cell: ({ row }) => (
-          <Typography
-            component={Link}
-            to={row.original.CertificateUrl}
-            className="underline"
-            color="secondary"
-            role="button"
-            target="_blank"
-          >
-            {row.original.CertificateUrl}
-          </Typography>
-        ),
-      },
-      {
-        accessorKey: "Clarity",
-        header: "Clarity",
-      },
-      {
-        accessorKey: "Color",
-        header: "Color",
-      },
-      {
-        accessorKey: "Cut",
-        header: "Cut",
-      },
-      {
-        accessorKey: "FluorescenceIntensity",
-        header: "Fluorescence Intensity",
-      },
-      {
-        accessorKey: "Lab",
-        header: "Lab",
-      },
-      {
-        accessorKey: "Polish",
-        header: "Polish",
-      },
-      {
-        accessorKey: "PolishedVideo",
-        header: "Polished Video",
-        Cell: ({ row }) => (
-          <Typography
-            component={Link}
-            to={row.original.PolishedVideo}
-            className="underline"
-            color="secondary"
-            role="button"
-            target="_blank"
-          >
-            View Video
-          </Typography>
-        ),
-      },
-      {
-        accessorKey: "ROUGH_CT",
-        header: "ROUGH Carat",
-      },
-      {
-        accessorKey: "ROUGH_DATE",
-        header: "ROUGH Date",
-      },
-      {
-        accessorKey: "RoughVideo",
-        header: "Rough Video",
-        Cell: ({ row }) => (
-          <Typography
-            component={Link}
-            to={row.original.RoughVideo}
-            className="underline"
-            color="secondary"
-            role="button"
-            target="_blank"
-          >
-            View Video
-          </Typography>
-        ),
-      },
-      {
-        accessorKey: "Shape",
-        header: "Shape",
-      },
-      {
-        accessorKey: "Symmetry",
-        header: "Symmetry",
-      },
-      {
-        accessorKey: "VendorStockNumber",
-        header: "Vendor Stock Number",
-      },
-      {
-        accessorKey: "Weight",
-        header: "Weight",
-      },
-      // Add the new column for generating HTML
-      {
-        accessorKey: "GenerateHTML",
-        header: "Generate HTML",
-        Cell: ({ row }) => (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => generateHtml(row.original)}
-          >
-            Generate HTML
-          </Button>
-        ),
-      },
-      // Add the new column for QR code
-      {
-        accessorKey: "QRCode",
-        header: "QR Code",
-        Cell: ({ row }) => (
-          <QRCode value={row.original.VendorStockNumber} size={64} />
-        ),
-      },
-    ],
-    []
-  );
-
-  if (isLoading) {
-    return <FuseLoading />;
-  }
-
-  return (
-    <Paper
-      className="flex flex-col flex-auto shadow-3 rounded-t-16 overflow-hidden rounded-b-0 w-full h-full"
-      elevation={0}
-    >
-      <DataTable
-        data={products}
-        columns={columns}
-        renderRowActionMenuItems={({ closeMenu, row, table }) => [
-          <MenuItem
-            key={0}
-            onClick={() => {
-              // replace with your delete function
-              console.log("Delete", row.original.id);
-              closeMenu();
-              table.resetRowSelection();
-            }}
-          >
-            <ListItemIcon>
-              <FuseSvgIcon>heroicons-outline:trash</FuseSvgIcon>
-            </ListItemIcon>
-            Delete
-          </MenuItem>,
-        ]}
-        renderTopToolbarCustomActions={({ table }) => {
-          const { rowSelection } = table.getState();
-
-          if (Object.keys(rowSelection).length === 0) {
-            return null;
-          }
-
-          return (
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => {
-                const selectedRows = table.getSelectedRowModel().rows;
-                // replace with your delete function
-                console.log(
-                  "Delete selected",
-                  selectedRows.map((row) => row.original.id)
-                );
-                table.resetRowSelection();
-              }}
-              className="flex shrink min-w-40 ltr:mr-8 rtl:ml-8"
-              color="secondary"
-            >
-              <FuseSvgIcon size={16}>heroicons-outline:trash</FuseSvgIcon>
-              <span className="hidden sm:flex mx-8">Delete selected items</span>
-            </Button>
-          );
-        }}
-      />
-    </Paper>
-  );
-}
-
-export default ProductsTable;
