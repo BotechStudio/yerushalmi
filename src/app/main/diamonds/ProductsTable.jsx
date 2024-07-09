@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useState } from "react";
 import DataTable from "app/shared-components/data-table/DataTable";
 import FuseLoading from "@fuse/core/FuseLoading";
-import { Chip, ListItemIcon, MenuItem, Paper } from "@mui/material";
+import { Chip, ListItemIcon, MenuItem, Paper, Snackbar } from "@mui/material";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { Link } from "react-router-dom";
 import Typography from "@mui/material/Typography";
@@ -18,6 +18,8 @@ function ProductsTable() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDiamonds, setSelectedDiamonds] = useState([]);
   const [disabledDiamonds, setDisabledDiamonds] = useState({});
+  const [syncMessage, setSyncMessage] = useState(""); // State for displaying sync status message
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar visibility
 
   useEffect(() => {
     const getData = async () => {
@@ -50,7 +52,7 @@ function ProductsTable() {
     console.log("Syncing selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDUyMTI1NywiZXhwIjoxNzIwNTI0ODU3fQ.CZqqLvkcYJFZyz-09VoBgdFvypWwpphYRFAYIlrGWyY";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDUzNDc0NCwiZXhwIjoxNzIwNTM4MzQ0fQ.Ey_1wM6P0wn_SJgQnRcyc3WLPi6EM5MUoDjaDjA34os";
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
@@ -65,12 +67,23 @@ function ProductsTable() {
 
       console.log("HTML Templates generated:", response.data);
 
+      // Display success message
+      setSyncMessage("HTML templates generated and saved successfully");
+      setSnackbarOpen(true);
+
       // Clear selected diamonds after generating HTML
       setSelectedDiamonds([]);
       setDisabledDiamonds({});
     } catch (error) {
       console.error("Error syncing and generating HTML templates:", error);
+
+      // Display error message
+      setSyncMessage("Failed to generate HTML templates");
+      setSnackbarOpen(true);
     }
+  };
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   const columns = useMemo(
@@ -176,7 +189,10 @@ function ProductsTable() {
         accessorKey: "QRCode",
         header: "QR Code",
         Cell: ({ row }) => (
-          <QRCode value={row.original.VendorStockNumber} size={64} />
+          <QRCode
+            value={`http://www.yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}_NEW.html`}
+            size={64}
+          />
         ),
       },
     ],
@@ -231,7 +247,6 @@ function ProductsTable() {
       className="flex flex-col flex-auto shadow-3 rounded-t-16 overflow-hidden rounded-b-0 w-full h-full"
       elevation={0}
     >
-
       <DataTable
         data={products}
         columns={columns}
@@ -252,6 +267,13 @@ function ProductsTable() {
             Delete
           </MenuItem>,
         ]}
+      />
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={syncMessage}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       />
     </Paper>
   );

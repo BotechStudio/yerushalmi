@@ -2,7 +2,7 @@ const fetchData = async () => {
   try {
     //need to generate from the SERVER
     const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDUyMTI1NywiZXhwIjoxNzIwNTI0ODU3fQ.CZqqLvkcYJFZyz-09VoBgdFvypWwpphYRFAYIlrGWyY";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDUzNDc0NCwiZXhwIjoxNzIwNTM4MzQ0fQ.Ey_1wM6P0wn_SJgQnRcyc3WLPi6EM5MUoDjaDjA34os";
 
     const response = await fetch("http://localhost:5000/yerushalmi/diamonds", {
       headers: {
