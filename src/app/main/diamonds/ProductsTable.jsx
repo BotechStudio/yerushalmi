@@ -50,7 +50,7 @@ function ProductsTable() {
     console.log("Syncing selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDQ0NjgwMSwiZXhwIjoxNzIwNDUwNDAxfQ.eGr_ChZv9MjWp0kMBA6zUXlirGxJsnTlk-GXsp559dk";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDUyMTI1NywiZXhwIjoxNzIwNTI0ODU3fQ.CZqqLvkcYJFZyz-09VoBgdFvypWwpphYRFAYIlrGWyY";
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
@@ -171,18 +171,6 @@ function ProductsTable() {
         accessorKey: "Weight",
         header: "Weight",
       },
-      {
-        accessorKey: "Select",
-        header: "Select",
-        Cell: ({ row }) => (
-          <input
-            type="checkbox"
-            checked={selectedDiamonds.includes(row.original.VendorStockNumber)}
-            disabled={disabledDiamonds[row.original.VendorStockNumber]}
-            onChange={() => handleSelectDiamond(row.original)}
-          />
-        ),
-      },
       // Add the new column for QR code
       {
         accessorKey: "QRCode",
@@ -194,6 +182,45 @@ function ProductsTable() {
     ],
     [selectedDiamonds, disabledDiamonds]
   );
+  const renderTopToolbarCustomActions = ({ table }) => {
+    const { rowSelection } = table.getState();
+
+    if (Object.keys(rowSelection).length === 0) {
+      return null;
+    }
+
+    const selectedRows = table.getSelectedRowModel().rows;
+    const selectedVendorStockNumbers = selectedRows.map(
+      (row) => row.original.VendorStockNumber
+    );
+
+    return (
+      <div className="flex space-x-4">
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => {
+            console.log("Delete selected", selectedVendorStockNumbers);
+            table.resetRowSelection();
+          }}
+          className="flex shrink min-w-40"
+          color="secondary"
+        >
+          <FuseSvgIcon size={16}>heroicons-outline:trash</FuseSvgIcon>
+          <span className="hidden sm:flex mx-8">Delete selected items</span>
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => handleSyncAndGenerateHTML(selectedVendorStockNumbers)}
+          disabled={selectedVendorStockNumbers.length === 0}
+        >
+          <FuseSvgIcon size={20}>heroicons-outline:upload</FuseSvgIcon>
+          <span className="mx-4 sm:mx-8">Sync Selected</span>
+        </Button>
+      </div>
+    );
+  };
 
   if (isLoading) {
     return <FuseLoading />;
@@ -204,26 +231,11 @@ function ProductsTable() {
       className="flex flex-col flex-auto shadow-3 rounded-t-16 overflow-hidden rounded-b-0 w-full h-full"
       elevation={0}
     >
-      <motion.div
-        className="flex flex-grow-0"
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
-      >
-        <Button
-          vlassName=""
-          variant="contained"
-          color="secondary"
-          onClick={() => handleSyncAndGenerateHTML(selectedDiamonds)}
-          disabled={selectedDiamonds.length === 0}
-        >
-          <FuseSvgIcon size={20}>heroicons-outline:upload</FuseSvgIcon>
-          <span className="mx-4 sm:mx-8">Sync Selected</span>
-        </Button>
-      </motion.div>
 
       <DataTable
         data={products}
         columns={columns}
+        renderTopToolbarCustomActions={renderTopToolbarCustomActions}
         renderRowActionMenuItems={({ closeMenu, row, table }) => [
           <MenuItem
             key={0}
@@ -240,34 +252,6 @@ function ProductsTable() {
             Delete
           </MenuItem>,
         ]}
-        renderTopToolbarCustomActions={({ table }) => {
-          const { rowSelection } = table.getState();
-
-          if (Object.keys(rowSelection).length === 0) {
-            return null;
-          }
-
-          return (
-            <Button
-              variant="contained"
-              size="small"
-              onClick={() => {
-                const selectedRows = table.getSelectedRowModel().rows;
-                // replace with your delete function
-                console.log(
-                  "Delete selected",
-                  selectedRows.map((row) => row.original.id)
-                );
-                table.resetRowSelection();
-              }}
-              className="flex shrink min-w-40 ltr:mr-8 rtl:ml-8"
-              color="secondary"
-            >
-              <FuseSvgIcon size={16}>heroicons-outline:trash</FuseSvgIcon>
-              <span className="hidden sm:flex mx-8">Delete selected items</span>
-            </Button>
-          );
-        }}
       />
     </Paper>
   );
