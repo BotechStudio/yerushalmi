@@ -48,5 +48,5 @@
     "tailwind.config.js",
     "vite.config.mjs",
     "vite-env.d.ts"
-  ],
+, "src/api/fetchData.js"  ],
 }
