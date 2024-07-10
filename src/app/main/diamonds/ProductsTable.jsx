@@ -52,7 +52,7 @@ function ProductsTable() {
     console.log("Syncing selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDU5OTQ2MiwiZXhwIjoxNzIwNjAzMDYyfQ.2W3fJkmBTeIpvV4aByJcS3dkYbuImVDm_VOZ_4Kz8DU";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDYwNjA4NywiZXhwIjoxNzIwNjA5Njg3fQ.Hkajg-eR8zJl2_qwFH88Qtj9AyUe3N-87xJQjssn_n4";
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
