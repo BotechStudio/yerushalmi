@@ -133,6 +133,10 @@ const template = fs.readFileSync(templatePath, "utf-8");
 
 // Function to replace placeholders with actual data
 function generateHtml(data) {
+  data.ROUGH_DATE = moment(data.ROUGH_DATE, "DD/MM/YYYY").format(
+    "MMMM D, YYYY"
+  );
+
   console.log("data:", data);
 
   let html = template;
@@ -171,7 +175,8 @@ function processCsvAndSaveToMongo() {
         PolishedVideo: row["Polished Video"], // Map "Polished Video" to "PolishedVideo"
       };
 
-      mappedRow.HTMLTemplate = generateHtml(mappedRow); // Generate and save the HTML template
+      generateHtml(mappedRow); // Generate and save the HTML template
+      mappedRow.HTMLTemplate = true;
       results.push(mappedRow);
     })
     .on("end", async () => {
@@ -185,43 +190,44 @@ function processCsvAndSaveToMongo() {
 }
 
 // Endpoint to get a diamond by VendorStockNumber and generate HTML
-app.post("/yerushalmi/diamond/html", authenticateToken, async (req, res) => {
-  const { VendorStockNumber } = req.body;
+// app.post("/yerushalmi/diamond/html", authenticateToken, async (req, res) => {
+//   const { VendorStockNumber } = req.body;
 
-  if (!VendorStockNumber) {
-    return res.status(400).json({ message: "VendorStockNumber is required" });
-  }
+//   if (!VendorStockNumber) {
+//     return res.status(400).json({ message: "VendorStockNumber is required" });
+//   }
 
-  try {
-    const diamond = await DiamondNew.findOne({ VendorStockNumber }).lean();
-    if (!diamond) {
-      return res.status(404).json({ message: "Diamond not found" });
-    }
+//   try {
+//     const diamond = await DiamondNew.findOne({ VendorStockNumber }).lean();
+//     if (!diamond) {
+//       return res.status(404).json({ message: "Diamond not found" });
+//     }
 
-    // Generate HTML if not already present
-    if (!diamond.HTMLTemplate) {
-      diamond.HTMLTemplate = generateHtml(diamond);
-      await DiamondNew.updateOne(
-        { _id: diamond._id },
-        { HTMLTemplate: diamond.HTMLTemplate }
-      );
-    }
+//     // Generate HTML if not already present
+//     if (!diamond.HTMLTemplate) {
+//       diamond.HTMLTemplate = generateHtml(diamond);
+//       await DiamondNew.updateOne(
+//         { _id: diamond._id },
+//         { HTMLTemplate: diamond.HTMLTemplate }
+//       );
+//     }
 
-    // Define the path for the HTML file
-    const htmlFilePath = path.join(
-      __dirname,
-      `../yerushalmi/docs/${VendorStockNumber}_NEW.html`
-    );
+//     // Define the path for the HTML file
+//     const htmlFilePath = path.join(
+//       __dirname,
+//       `../yerushalmi/docs/${VendorStockNumber}_NEW.html`
+//     );
 
-    // Write the HTML file to the specified path
-    fs.writeFileSync(htmlFilePath, diamond.HTMLTemplate, "utf-8");
+//     // Write the HTML file to the specified path
+//     fs.writeFileSync(htmlFilePath, diamond.HTMLTemplate, "utf-8");
 
-    res.send(diamond.HTMLTemplate); // Send the generated HTML as the response
-  } catch (error) {
-    console.error("Error generating HTML:", error);
-    res.status(500).json({ message: error.message });
-  }
-});
+//     res.send(diamond.HTMLTemplate); // Send the generated HTML as the response
+//   } catch (error) {
+//     console.error("Error generating HTML:", error);
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
 // Endpoint to generate HTML templates for multiple diamonds
 app.post(
   "/yerushalmi/diamond/generateHtmlTemplates",
@@ -243,7 +249,7 @@ app.post(
       for (const diamond of diamonds) {
         // Generate HTML if not already present or is false
         if (!diamond.HTMLTemplate || diamond.HTMLTemplate === false) {
-          diamond.HTMLTemplate = generateHtml(diamond);
+          const htmlContent = generateHtml(diamond);
 
           // Sanitize the filename
           const sanitizedFileName = sanitizeFileName(
@@ -256,7 +262,7 @@ app.post(
           );
 
           // Write the HTML file to the specified path
-          fs.writeFileSync(htmlFilePath, diamond.HTMLTemplate, "utf-8");
+          fs.writeFileSync(htmlFilePath, htmlContent, "utf-8");
 
           // Update HTMLTemplate field to true
           await DiamondNew.updateOne(
