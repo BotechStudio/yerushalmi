@@ -12,6 +12,7 @@ const csv = require("csv-parser");
 const FTPClient = require("ftp");
 const path = require("path");
 const moment = require("moment");
+const multer = require("multer");
 
 const app = express();
 connectDB();
@@ -188,45 +189,57 @@ function processCsvAndSaveToMongo() {
       }
     });
 }
+const upload = multer({ dest: "uploads/" });
 
-// Endpoint to get a diamond by VendorStockNumber and generate HTML
-// app.post("/yerushalmi/diamond/html", authenticateToken, async (req, res) => {
-//   const { VendorStockNumber } = req.body;
+// Endpoint to upload and process CSV file
+app.post(
+  "/yerushalmi/upload-csv",
+  authenticateToken,
+  upload.single("file"),
+  (req, res) => {
+    const filePath = req.file.path;
+    console.log("filePath:", filePath);
+    const results = [];
 
-//   if (!VendorStockNumber) {
-//     return res.status(400).json({ message: "VendorStockNumber is required" });
-//   }
+    fs.createReadStream(filePath)
+      .pipe(csv())
+      .on("data", (row) => {
+        // Map CSV fields to MongoDB fields
+        const mappedRow = {
+          VendorStockNumber: row["VendorStockNumber"],
+          Shape: row["Shape"],
+          Weight: row["Weight"],
+          Color: row["Color"],
+          Clarity: row["Clarity"],
+          Cut: row["Cut"],
+          Polish: row["Polish"],
+          Symmetry: row["Symmetry"],
+          FluorescenceIntensity: row["FluorescenceIntensity"],
+          Lab: row["Lab"],
+          ROUGH_CT: row["ROUGH CT"], // Map "ROUGH CT" to "ROUGH_CT"
+          ROUGH_DATE: row["ROUGH DATE"], // Map "ROUGH DATE" to "ROUGH_DATE"
+          CertificateUrl: row["CertificateUrl"] || "-",
+          RoughVideo: row["Rough Video"], // Map "Rough Video" to "RoughVideo"
+          PolishedVideo: row["Polished Video"], // Map "Polished Video" to "PolishedVideo"
+        };
 
-//   try {
-//     const diamond = await DiamondNew.findOne({ VendorStockNumber }).lean();
-//     if (!diamond) {
-//       return res.status(404).json({ message: "Diamond not found" });
-//     }
+        // generateHtml(mappedRow); // Generate and save the HTML template
+        mappedRow.HTMLTemplate = false;
+        results.push(mappedRow);
+      })
+      .on("end", async () => {
+        try {
+          await DiamondNew.insertMany(results);
+          console.log("Data successfully saved to MongoDB");
+        } catch (error) {
+          console.error("Error saving data to MongoDB:", error);
+        }
+      });
 
-//     // Generate HTML if not already present
-//     if (!diamond.HTMLTemplate) {
-//       diamond.HTMLTemplate = generateHtml(diamond);
-//       await DiamondNew.updateOne(
-//         { _id: diamond._id },
-//         { HTMLTemplate: diamond.HTMLTemplate }
-//       );
-//     }
-
-//     // Define the path for the HTML file
-//     const htmlFilePath = path.join(
-//       __dirname,
-//       `../yerushalmi/docs/${VendorStockNumber}_NEW.html`
-//     );
-
-//     // Write the HTML file to the specified path
-//     fs.writeFileSync(htmlFilePath, diamond.HTMLTemplate, "utf-8");
-
-//     res.send(diamond.HTMLTemplate); // Send the generated HTML as the response
-//   } catch (error) {
-//     console.error("Error generating HTML:", error);
-//     res.status(500).json({ message: error.message });
-//   }
-// });
+    // processCsvAndSaveToMongo(filePath);
+    res.status(200).json({ message: "File uploaded and processing started" });
+  }
+);
 
 // Endpoint to generate HTML templates for multiple diamonds
 app.post(
@@ -279,78 +292,6 @@ app.post(
     }
   }
 );
-
-// app.post(
-//   "/yerushalmi/diamond/generateHtmlTemplates",
-//   authenticateToken,
-//   async (req, res) => {
-//     const { vendorStockNumbers } = req.body;
-
-//     if (!Array.isArray(vendorStockNumbers) || vendorStockNumbers.length === 0) {
-//       return res
-//         .status(400)
-//         .json({ message: "VendorStockNumbers should be a non-empty array" });
-//     }
-
-//     try {
-//       const diamonds = await DiamondNew.find({
-//         VendorStockNumber: { $in: vendorStockNumbers },
-//       }).lean();
-
-//       for (const diamond of diamonds) {
-//         // Generate HTML if not already present
-//         if (!diamond.HTMLTemplate) {
-//           diamond.HTMLTemplate = generateHtml(diamond);
-//           await DiamondNew.updateOne(
-//             { _id: diamond._id },
-//             { HTMLTemplate: diamond.HTMLTemplate }
-//           );
-//         }
-//         // Sanitize the filename
-//         const sanitizedFileName = sanitizeFileName(
-//           `${diamond.VendorStockNumber}_NEW`
-//         );
-//         // Define the path for the HTML file
-//         const htmlFilePath = path.join(
-//           __dirname,
-//           `../yerushalmi/docs/${sanitizedFileName}.html`
-//         );
-
-//         // Write the HTML file to the specified path
-//         fs.writeFileSync(htmlFilePath, diamond.HTMLTemplate, "utf-8");
-//       }
-
-//       res.json({ message: "HTML templates generated and saved successfully" });
-//     } catch (error) {
-//       console.error("Error generating HTML templates:", error);
-//       res.status(500).json({ message: error.message });
-//     }
-//   }
-// );
-
-// app.post("/yerushalmi/diamond/getHtmlTemplate", authenticateToken, async (req, res) => {
-//   const { VendorStockNumber } = req.body;
-
-//   if (!VendorStockNumber) {
-//     return res.status(400).json({ message: "VendorStockNumber is required" });
-//   }
-
-//   try {
-//     const diamond = await DiamondNew.findOne({ VendorStockNumber }).lean();
-//     if (!diamond) {
-//       return res.status(404).json({ message: "Diamond not found" });
-//     }
-
-//     if (!diamond.HTMLTemplate) {
-//       return res.status(404).json({ message: "HTMLTemplate not found for the specified diamond" });
-//     }
-
-//     res.json({ HTMLTemplate: diamond.HTMLTemplate });
-//   } catch (error) {
-//     console.error("Error fetching HTML template:", error);
-//     res.status(500).json({ message: error.message });
-//   }
-// });
 
 // Endpoint to trigger the FTP download and save to MongoDB
 app.post("/yerushalmi/import-diamonds", authenticateToken, (req, res) => {

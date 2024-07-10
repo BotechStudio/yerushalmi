@@ -20,6 +20,7 @@ function ProductsTable() {
   const [disabledDiamonds, setDisabledDiamonds] = useState({});
   const [syncMessage, setSyncMessage] = useState(""); // State for displaying sync status message
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar visibility
+  const [selectedFile, setSelectedFile] = useState(null); // State for selected file
 
   useEffect(() => {
     const getData = async () => {
@@ -35,6 +36,49 @@ function ProductsTable() {
     };
     getData();
   }, []);
+
+  const handleFileSelect = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      console.error("No file selected.");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDYyNDI3MywiZXhwIjoxNzIwNjI3ODczfQ.d1mm8REBz_yVJNv3HbcfbPmzliJcU3gr3wBh4lvuR30";
+
+      const response = await axios.post(
+        "http://localhost:5000/yerushalmi/upload-csv",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("File upload response:", response.data);
+
+      // Handle success message or further actions as needed
+      setSyncMessage("File uploaded successfully");
+      setSnackbarOpen(true);
+
+      // Optionally, refresh data after successful upload
+      // getData();
+    } catch (error) {
+      console.error("Error uploading file:", error);
+
+      // Handle error message or further actions as needed
+      setSyncMessage("Failed to upload file");
+      setSnackbarOpen(true);
+    }
+  };
 
   const handleSelectDiamond = (diamond) => {
     setSelectedDiamonds((prevSelected) => [
@@ -52,7 +96,7 @@ function ProductsTable() {
     console.log("Syncing selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDYwNjA4NywiZXhwIjoxNzIwNjA5Njg3fQ.Hkajg-eR8zJl2_qwFH88Qtj9AyUe3N-87xJQjssn_n4";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDYyNDI3MywiZXhwIjoxNzIwNjI3ODczfQ.d1mm8REBz_yVJNv3HbcfbPmzliJcU3gr3wBh4lvuR30";
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
@@ -247,6 +291,29 @@ function ProductsTable() {
       className="flex flex-col flex-auto shadow-3 rounded-t-16 overflow-hidden rounded-b-0 w-full h-full"
       elevation={0}
     >
+      <div className="flex space-x-4 mb-4">
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleFileSelect}
+          className="hidden"
+          id="file-upload"
+        />
+        <label htmlFor="file-upload">
+          <Button variant="contained" component="span" color="primary">
+            Import CSV
+          </Button>
+        </label>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleFileUpload}
+          disabled={!selectedFile}
+        >
+          Upload
+        </Button>
+      </div>
+
       <DataTable
         data={products}
         columns={columns}

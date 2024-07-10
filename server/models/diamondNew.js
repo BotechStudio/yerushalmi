@@ -1,21 +1,21 @@
 const mongoose = require("mongoose");
 
 const diamondNewSchema = new mongoose.Schema({
-  VendorStockNumber: { type: String, required: true },
-  Shape: { type: String, required: true },
-  Weight: { type: String, required: true },
-  Color: { type: String, required: true },
-  Clarity: { type: String, required: true },
-  Cut: { type: String, required: true },
-  Polish: { type: String, required: true },
-  Symmetry: { type: String, required: true },
-  FluorescenceIntensity: { type: String, required: true },
-  Lab: { type: String, required: true },
-  ROUGH_CT: { type: String, required: true },
-  ROUGH_DATE: { type: String, required: true },
-  CertificateUrl: { type: String, required: true },
-  RoughVideo: { type: String, required: true },
-  PolishedVideo: { type: String, required: true },
+  VendorStockNumber: { type: String },
+  Shape: { type: String },
+  Weight: { type: String },
+  Color: { type: String },
+  Clarity: { type: String },
+  Cut: { type: String },
+  Polish: { type: String },
+  Symmetry: { type: String },
+  FluorescenceIntensity: { type: String },
+  Lab: { type: String },
+  ROUGH_CT: { type: String },
+  ROUGH_DATE: { type: String },
+  CertificateUrl: { type: String },
+  RoughVideo: { type: String },
+  PolishedVideo: { type: String },
   HTMLTemplate: { type: Boolean }, // New field for storing the HTML template
 });
 
