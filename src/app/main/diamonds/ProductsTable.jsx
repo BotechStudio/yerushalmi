@@ -21,19 +21,22 @@ function ProductsTable() {
   const [syncMessage, setSyncMessage] = useState(""); // State for displaying sync status message
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar visibility
 
+  // Function to fetch data from the server
+  const getData = async () => {
+    try {
+      const data = await fetchData();
+      console.log("Fetched data in App:", data);
+      setProducts(data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error in App useEffect:", error);
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch initial data on component mount
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await fetchData();
-        console.log("Fetched data in App:", data);
-        setProducts(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error in App useEffect:", error);
-        setIsLoading(false);
-      }
-    };
-    getData();
+    getData(); // Call getData to fetch initial data
   }, []);
 
   const handleSelectDiamond = (diamond) => {
@@ -52,7 +55,7 @@ function ProductsTable() {
     console.log("Syncing selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDY4NjA2OCwiZXhwIjoxNzIwNjg5NjY4fQ.0zRy5fej9dKAfb4xy8LAT_kHu4-u5IJqbkjRej1qOPs";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDY5NjA0NywiZXhwIjoxNzIwNjk5NjQ3fQ.WrAlA8qTYc2b_UtpScctM6aKXLhDrtLn-loXXKobYUw";
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
@@ -74,6 +77,9 @@ function ProductsTable() {
       // Clear selected diamonds after generating HTML
       setSelectedDiamonds([]);
       setDisabledDiamonds({});
+
+      // Refresh data after successful sync
+      getData();
     } catch (error) {
       console.error("Error syncing and generating HTML templates:", error);
 
@@ -87,7 +93,7 @@ function ProductsTable() {
     console.log("Deleting selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDY4NjA2OCwiZXhwIjoxNzIwNjg5NjY4fQ.0zRy5fej9dKAfb4xy8LAT_kHu4-u5IJqbkjRej1qOPs";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDY5NjA0NywiZXhwIjoxNzIwNjk5NjQ3fQ.WrAlA8qTYc2b_UtpScctM6aKXLhDrtLn-loXXKobYUw";
 
       const response = await axios.delete(
         "http://localhost:5000/yerushalmi/diamonds/byVendorStockNumber",
@@ -106,6 +112,8 @@ function ProductsTable() {
       setSyncMessage("Diamonds deleted successfully");
       setSnackbarOpen(true);
 
+      // Refresh data after successful deletion
+      getData();
       // Optionally, refresh data after successful deletion
       const updatedProducts = products.filter(
         (product) => !diamonds.includes(product.VendorStockNumber)
