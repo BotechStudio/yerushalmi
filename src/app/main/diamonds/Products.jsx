@@ -28,11 +28,11 @@ function Diamonds() {
   // const { t } = useTranslation('DiamondsPage');
   return (
     <Root
-      // header={
-      // 	<div className="p-24">
-      // 		<ProductsHeader />
-      // 	</div>
-      // }
+      header={
+        <div className="p-24">
+          <ProductsHeader />
+        </div>
+      }
       content={
         <div className="p-24">
           <GlobalStyles
