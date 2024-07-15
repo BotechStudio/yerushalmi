@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DemoContent from "@fuse/core/DemoContent";
 import FusePageSimple from "@fuse/core/FusePageSimple";
 import { useTranslation } from "react-i18next";
@@ -25,12 +26,14 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
  * The Diamonds page.
  */
 function Diamonds() {
+  const [tableDisabled, setTableDisabled] = useState(false);
+
   // const { t } = useTranslation('DiamondsPage');
   return (
     <Root
       header={
         <div className="p-24">
-          <ProductsHeader />
+          <ProductsHeader setTableDisabled={setTableDisabled} />
         </div>
       }
       content={
@@ -43,7 +46,7 @@ function Diamonds() {
             })}
           />
           <div className="w-full h-full container flex flex-col">
-            <ProductsTable />
+            <ProductsTable disabled={tableDisabled} />
           </div>
         </div>
       }

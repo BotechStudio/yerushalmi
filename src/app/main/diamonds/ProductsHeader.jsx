@@ -9,7 +9,7 @@ import axios from "axios";
 import fetchData from "src/api/fetchData"; /**
  * The products header.
  */
-function ProductsHeader() {
+function ProductsHeader({ setTableDisabled }) {
   const [syncMessage, setSyncMessage] = useState(""); // State for displaying sync status message
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar visibility
   const [selectedFile, setSelectedFile] = useState(null); // State for selected file
@@ -36,11 +36,12 @@ function ProductsHeader() {
   };
   const handleFileUpload = async (file) => {
     setUploading(true);
+    setTableDisabled(true); // Disable the table when upload starts
     try {
       const formData = new FormData();
       formData.append("file", file);
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDY5NjA0NywiZXhwIjoxNzIwNjk5NjQ3fQ.WrAlA8qTYc2b_UtpScctM6aKXLhDrtLn-loXXKobYUw";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMTAzNDM4NiwiZXhwIjoxNzIxMDM3OTg2fQ.9PvnJBRtJHYTCqpPTxHKyfM69zmuAQOqPLJKCF3UoAI";
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/upload-csv",
@@ -58,8 +59,7 @@ function ProductsHeader() {
       // Handle success message or further actions as needed
       setSyncMessage("File uploaded successfully");
       setSnackbarOpen(true);
-
-      //   Optionally, refresh data after successful upload
+      // //   Optionally, refresh data after successful upload
       getData();
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -70,6 +70,7 @@ function ProductsHeader() {
     } finally {
       setUploading(false);
       setSelectedFile(null); // Reset file selection
+      setTableDisabled(false); // Re-enable the table when upload is finished
     }
   };
 

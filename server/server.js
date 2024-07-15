@@ -13,6 +13,7 @@ const FTPClient = require("ftp");
 const path = require("path");
 const moment = require("moment");
 const multer = require("multer");
+const simpleGit = require("simple-git");
 
 const app = express();
 connectDB();
@@ -25,6 +26,8 @@ const ftpConfig = {
   user: "ftpuser",
   password: "ftpuser1",
 };
+
+const git = simpleGit();
 
 // Path to the directory containing the CSV files on the FTP server (root directory)
 // const ftpDirPath = "/home/ftpuser/vegas stones csv.csv";
@@ -282,6 +285,13 @@ app.post(
             { _id: diamond._id },
             { HTMLTemplate: true }
           );
+
+          // Stage, commit, and push the changes using simple-git
+          await git.add(htmlFilePath);
+          await git.commit(
+            `Add HTML template for ${diamond.VendorStockNumber}`
+          );
+          await git.push("origin", "main");
         }
       }
 

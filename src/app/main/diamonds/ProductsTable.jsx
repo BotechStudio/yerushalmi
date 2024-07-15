@@ -13,7 +13,7 @@ import { saveAs } from "file-saver";
 import QRCode from "qrcode.react";
 import axios from "axios";
 
-function ProductsTable() {
+function ProductsTable({ disabled}) {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDiamonds, setSelectedDiamonds] = useState([]);
@@ -55,7 +55,7 @@ function ProductsTable() {
     console.log("Syncing selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDY5NjA0NywiZXhwIjoxNzIwNjk5NjQ3fQ.WrAlA8qTYc2b_UtpScctM6aKXLhDrtLn-loXXKobYUw";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMTAzNDM4NiwiZXhwIjoxNzIxMDM3OTg2fQ.9PvnJBRtJHYTCqpPTxHKyfM69zmuAQOqPLJKCF3UoAI";
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
@@ -78,8 +78,8 @@ function ProductsTable() {
       setSelectedDiamonds([]);
       setDisabledDiamonds({});
 
-      // Refresh data after successful sync
-      getData();
+       // Refresh data after successful sync
+       getData();
     } catch (error) {
       console.error("Error syncing and generating HTML templates:", error);
 
@@ -87,13 +87,14 @@ function ProductsTable() {
       setSyncMessage("Failed to generate HTML templates");
       setSnackbarOpen(true);
     }
+
   };
 
   const handleDeleteSelectedDiamonds = async (diamonds) => {
     console.log("Deleting selected diamonds:", diamonds);
     try {
       const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMDY5NjA0NywiZXhwIjoxNzIwNjk5NjQ3fQ.WrAlA8qTYc2b_UtpScctM6aKXLhDrtLn-loXXKobYUw";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMTAzNDM4NiwiZXhwIjoxNzIxMDM3OTg2fQ.9PvnJBRtJHYTCqpPTxHKyfM69zmuAQOqPLJKCF3UoAI";
 
       const response = await axios.delete(
         "http://localhost:5000/yerushalmi/diamonds/byVendorStockNumber",
@@ -112,8 +113,8 @@ function ProductsTable() {
       setSyncMessage("Diamonds deleted successfully");
       setSnackbarOpen(true);
 
-      // Refresh data after successful deletion
-      getData();
+  // Refresh data after successful deletion
+  getData();
       // Optionally, refresh data after successful deletion
       const updatedProducts = products.filter(
         (product) => !diamonds.includes(product.VendorStockNumber)
@@ -121,6 +122,7 @@ function ProductsTable() {
       setProducts(updatedProducts);
       setSelectedDiamonds([]);
       setDisabledDiamonds({});
+
     } catch (error) {
       console.error("Error deleting diamonds:", error);
 
@@ -295,27 +297,32 @@ function ProductsTable() {
       className="flex flex-col flex-auto shadow-3 rounded-t-16 overflow-hidden rounded-b-0 w-full h-full"
       elevation={0}
     >
-      <DataTable
-        data={products}
-        columns={columns}
-        renderTopToolbarCustomActions={renderTopToolbarCustomActions}
-        renderRowActionMenuItems={({ closeMenu, row, table }) => [
-          <MenuItem
-            key={0}
-            onClick={() => {
-              // replace with your delete function
-              console.log("Delete", row.original.id);
-              closeMenu();
-              table.resetRowSelection();
-            }}
-          >
-            <ListItemIcon>
-              <FuseSvgIcon>heroicons-outline:trash</FuseSvgIcon>
-            </ListItemIcon>
-            Delete
-          </MenuItem>,
-        ]}
-      />
+      {disabled ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <p>Table is disabled during CSV import.</p>
+        </div>
+      ) : (
+        <DataTable
+          data={products}
+          columns={columns}
+          renderTopToolbarCustomActions={renderTopToolbarCustomActions}
+          renderRowActionMenuItems={({ closeMenu, row, table }) => [
+            <MenuItem
+              key={0}
+              onClick={() => {
+                console.log("Delete", row.original.id);
+                closeMenu();
+                table.resetRowSelection();
+              }}
+            >
+              <ListItemIcon>
+                <FuseSvgIcon>heroicons-outline:trash</FuseSvgIcon>
+              </ListItemIcon>
+              Delete
+            </MenuItem>,
+          ]}
+        />
+      )}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
