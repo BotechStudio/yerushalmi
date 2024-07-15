@@ -14,11 +14,25 @@ const path = require("path");
 const moment = require("moment");
 const multer = require("multer");
 const simpleGit = require("simple-git");
+const http = require("http");
+const WebSocket = require("ws");
 
 const app = express();
 connectDB();
 app.use(express.json());
 app.use(cors());
+
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+// Broadcast function to send updates to all connected clients
+const broadcast = (data) => {
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(data));
+    }
+  });
+};
 
 // FTP configuration
 const ftpConfig = {
@@ -135,6 +149,23 @@ const templatePath = path.join(__dirname, "../docs/template.html");
 const template = fs.readFileSync(templatePath, "utf-8");
 // console.log("Template Path:", templatePath);
 
+// Endpoint to update the HTMLTemplate field
+app.put("/yerushalmi/diamonds/update-html-template", async (req, res) => {
+  try {
+    // Define the update
+    const update = { HTMLTemplate: false };
+
+    // Update all documents where HTMLTemplate is true
+    const result = await DiamondNew.updateMany({ HTMLTemplate: true }, update);
+
+    res
+      .status(200)
+      .json({ message: `${result.nModified} documents updated successfully.` });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating documents", error });
+  }
+});
+
 // Function to replace placeholders with actual data
 function generateHtml(data) {
   data.ROUGH_DATE = moment(data.ROUGH_DATE, "DD/MM/YYYY").format(
@@ -234,13 +265,23 @@ app.post(
         try {
           await DiamondNew.insertMany(results);
           console.log("Data successfully saved to MongoDB");
+          const updatedList = await DiamondNew.find({});
+          broadcast({ message: "Data updated", data: updatedList });
+          res.status(200).json({
+            message: "File uploaded and processing started",
+            data: updatedList,
+          });
         } catch (error) {
           console.error("Error saving data to MongoDB:", error);
+          res.status(500).json({
+            message: "Error saving data to MongoDB",
+            error,
+          });
         }
       });
 
     // processCsvAndSaveToMongo(filePath);
-    res.status(200).json({ message: "File uploaded and processing started" });
+    // res.status(200).json({ message: "File uploaded and processing started" });
   }
 );
 
@@ -258,6 +299,9 @@ app.post(
     }
 
     try {
+      // Pull the latest changes from the repository
+      // await git.pull("origin", "main");
+
       const diamonds = await DiamondNew.find({
         VendorStockNumber: { $in: vendorStockNumbers },
       }).lean();
@@ -286,12 +330,28 @@ app.post(
             { HTMLTemplate: true }
           );
 
-          // Stage, commit, and push the changes using simple-git
-          await git.add(htmlFilePath);
-          await git.commit(
-            `Add HTML template for ${diamond.VendorStockNumber}`
-          );
-          await git.push("origin", "main");
+          try {
+            // Stage, commit, and push the changes using simple-git
+            await git.add(htmlFilePath);
+            await git.commit(
+              `Add HTML template for ${diamond.VendorStockNumber}`
+            );
+            await git.push("origin", "main");
+            // Update HTMLTemplate field to true
+            await DiamondNew.updateOne(
+              { _id: diamond._id },
+              { HTMLTemplate: true }
+            );
+          } catch (gitError) {
+            console.error(
+              `Error during git operations for ${diamond.VendorStockNumber}:`,
+              gitError
+            );
+            res.status(500).json({
+              message: `Git operations failed for ${diamond.VendorStockNumber}`,
+            });
+            return;
+          }
         }
       }
 
@@ -345,6 +405,9 @@ app.get("/yerushalmi/diamonds", authenticateToken, async (req, res) => {
       data = data.sort({ [sortField[0]]: sortField[1] === "desc" ? -1 : 1 });
     }
     data = await data.exec();
+    // Broadcast updated data to WebSocket clients
+    const updatedList = await DiamondNew.find({});
+    broadcast({ message: "Data updated", data: updatedList });
     res.json(data);
   } catch (error) {
     console.error("Error fetching data:", error);

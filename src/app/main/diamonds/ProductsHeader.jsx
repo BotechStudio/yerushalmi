@@ -40,8 +40,7 @@ function ProductsHeader({ setTableDisabled }) {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMTAzNDM4NiwiZXhwIjoxNzIxMDM3OTg2fQ.9PvnJBRtJHYTCqpPTxHKyfM69zmuAQOqPLJKCF3UoAI";
+      const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.post(
         "http://localhost:5000/yerushalmi/upload-csv",

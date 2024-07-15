@@ -1,8 +1,7 @@
 const fetchData = async () => {
   try {
     //need to generate from the SERVER
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJ0ZXN0dXNlciIsImlhdCI6MTcyMTAzNDM4NiwiZXhwIjoxNzIxMDM3OTg2fQ.9PvnJBRtJHYTCqpPTxHKyfM69zmuAQOqPLJKCF3UoAI";
+    const token = import.meta.env.VITE_TOKEN;
 
     const response = await fetch("http://localhost:5000/yerushalmi/diamonds", {
       headers: {
