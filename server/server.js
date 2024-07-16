@@ -181,9 +181,12 @@ app.put("/yerushalmi/diamonds/update-html-template", async (req, res) => {
 
 // Function to replace placeholders with actual data
 function generateHtml(data) {
-  data.ROUGH_DATE = moment(data.ROUGH_DATE, "DD/MM/YYYY").format(
-    "MMMM D, YYYY"
-  );
+  console.log("data:", data);
+  if (moment(data.ROUGH_DATE, "DD/MM/YYYY", true).isValid()) {
+    data.ROUGH_DATE = moment(data.ROUGH_DATE, "DD/MM/YYYY").format(
+      "MMMM D, YYYY"
+    );
+  }
 
   console.log("data:", data);
 
@@ -322,6 +325,7 @@ app.post(
       for (const diamond of diamonds) {
         // Generate HTML if not already present or is false
         if (!diamond.HTMLTemplate || diamond.HTMLTemplate === false) {
+          console.log("diamond:", diamond);
           const htmlContent = generateHtml(diamond);
 
           // Sanitize the filename
