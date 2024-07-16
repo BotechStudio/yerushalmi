@@ -36,12 +36,25 @@ const broadcast = (data) => {
 
 // FTP configuration
 const ftpConfig = {
-  host: "206.81.26.56",
-  user: "ftpuser",
-  password: "ftpuser1",
+  host: process.env.FTP_HOST,
+  user: process.env.FTP_USER,
+  password: process.env.FTP_PASSWORD,
 };
 
 const git = simpleGit();
+
+// WebSocket connection event
+wss.on("connection", (ws) => {
+  console.log("Client connected");
+
+  ws.on("message", (message) => {
+    console.log("Received message:", message);
+  });
+
+  ws.on("close", () => {
+    console.log("Client disconnected");
+  });
+});
 
 // Path to the directory containing the CSV files on the FTP server (root directory)
 // const ftpDirPath = "/home/ftpuser/vegas stones csv.csv";
@@ -528,4 +541,4 @@ app.post("/yerushalmi/diamonds", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

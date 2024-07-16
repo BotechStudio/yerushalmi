@@ -103,13 +103,11 @@ function ProductsTable({ disabled }) {
       // Display success message
       setSyncMessage("HTML templates generated and saved successfully");
       setSnackbarOpen(true);
-
+      // Refresh data after successful sync
+      await getData();
       // Clear selected diamonds after generating HTML
       setSelectedDiamonds([]);
       setDisabledDiamonds({});
-
-      // Refresh data after successful sync
-      getData();
     } catch (error) {
       console.error("Error syncing and generating HTML templates:", error);
 
@@ -118,7 +116,6 @@ function ProductsTable({ disabled }) {
       setSnackbarOpen(true);
     }
   };
-
   const handleDeleteSelectedDiamonds = async (diamonds) => {
     console.log("Deleting selected diamonds:", diamonds);
     try {
@@ -350,6 +347,7 @@ function ProductsTable({ disabled }) {
           ]}
         />
       )}
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
