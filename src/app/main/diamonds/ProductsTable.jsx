@@ -41,7 +41,7 @@ function ProductsTable({ disabled }) {
     getData(); // Call getData to fetch initial data
     // const token = import.meta.env.VITE_TOKEN;
     const ws = new WebSocket(
-      "ws://server.yerushalmi.online/yerushalmi/diamonds"
+      "wss://server.yerushalmi.online/yerushalmi/diamonds"
     );
     ws.onopen = () => {
       console.log("WebSocket connected");
