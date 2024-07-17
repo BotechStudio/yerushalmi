@@ -88,7 +88,7 @@ function ProductsTable({ disabled }) {
       const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.post(
-        "http://server.yerushalmi.online/diamond/generateHtmlTemplates",
+        "https://server.yerushalmi.online/diamond/generateHtmlTemplates",
         { vendorStockNumbers: diamonds },
         {
           headers: {
@@ -122,7 +122,7 @@ function ProductsTable({ disabled }) {
       const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.delete(
-        "http://server.yerushalmi.online/diamonds/byVendorStockNumber",
+        "https://server.yerushalmi.online/diamonds/byVendorStockNumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -3,7 +3,7 @@ const fetchData = async () => {
     //need to generate from the SERVER
     const token = import.meta.env.VITE_TOKEN;
 
-    const response = await fetch("http://server.yerushalmi.online/diamonds", {
+    const response = await fetch("https://server.yerushalmi.online/diamonds", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
