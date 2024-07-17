@@ -57,3 +57,6 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+env (roy)
+package-lock.json
+server/env
