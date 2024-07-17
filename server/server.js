@@ -221,7 +221,7 @@ function processCsvAndSaveToMongo() {
         Lab: row["Lab"],
         ROUGH_CT: row["ROUGH CT"], // Map "ROUGH CT" to "ROUGH_CT"
         ROUGH_DATE: row["ROUGH DATE"], // Map "ROUGH DATE" to "ROUGH_DATE"
-        CertificateUrl: row["CertificateUrl"] || "-",
+        CertificateUrl: row["Certificate Url"],
         RoughVideo: row["Rough Video"], // Map "Rough Video" to "RoughVideo"
         PolishedVideo: row["Polished Video"], // Map "Polished Video" to "PolishedVideo"
       };
@@ -268,7 +268,7 @@ app.post(
           Lab: row["Lab"],
           ROUGH_CT: row["ROUGH CT"], // Map "ROUGH CT" to "ROUGH_CT"
           ROUGH_DATE: row["ROUGH DATE"], // Map "ROUGH DATE" to "ROUGH_DATE"
-          CertificateUrl: row["CertificateUrl"] || "-",
+          CertificateUrl: row["Certificate Url"],
           RoughVideo: row["Rough Video"], // Map "Rough Video" to "RoughVideo"
           PolishedVideo: row["Polished Video"], // Map "Polished Video" to "PolishedVideo"
         };

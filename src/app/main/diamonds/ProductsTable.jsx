@@ -163,6 +163,38 @@ function ProductsTable({ disabled }) {
   const columns = useMemo(
     () => [
       {
+        accessorKey: "QRCode",
+        header: "QR Code",
+        Cell: ({ row }) =>
+          row.original.HTMLTemplate ? (
+            <QRCode
+              value={`http://www.yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}_NEW.html`}
+              size={64}
+            />
+          ) : null,
+      },
+      {
+        accessorKey: "VendorStockNumber",
+        header: "Vendor Stock Number",
+        Cell: ({ row }) => {
+          const url = row.original.HTMLTemplate
+            ? `http://www.yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}_NEW.html`
+            : "#";
+          return (
+            <Typography
+              component={Link}
+              to={url}
+              className="underline"
+              color="secondary"
+              role="button"
+              target="_blank"
+            >
+              {row.original.VendorStockNumber}
+            </Typography>
+          );
+        },
+      },
+      {
         accessorKey: "CertificateUrl",
         header: "Certificate Url",
         Cell: ({ row }) => (
@@ -251,23 +283,8 @@ function ProductsTable({ disabled }) {
         header: "Symmetry",
       },
       {
-        accessorKey: "VendorStockNumber",
-        header: "Vendor Stock Number",
-      },
-      {
         accessorKey: "Weight",
         header: "Weight",
-      },
-      // Add the new column for QR code
-      {
-        accessorKey: "QRCode",
-        header: "QR Code",
-        Cell: ({ row }) => (
-          <QRCode
-            value={`http://www.yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}_NEW.html`}
-            size={64}
-          />
-        ),
       },
     ],
     [selectedDiamonds, disabledDiamonds]
