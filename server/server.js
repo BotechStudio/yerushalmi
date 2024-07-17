@@ -330,7 +330,7 @@ app.post(
 
           // Sanitize the filename
           const sanitizedFileName = sanitizeFileName(
-            `${diamond.VendorStockNumber}_NEW`
+            `${diamond.VendorStockNumber}`
           );
           // Define the path for the HTML file../docs/template.html
           const htmlFilePath = path.join(

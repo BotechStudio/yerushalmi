@@ -40,7 +40,7 @@ function ProductsTable({ disabled }) {
   useEffect(() => {
     getData(); // Call getData to fetch initial data
     // const token = import.meta.env.VITE_TOKEN;
-    const ws = new WebSocket("ws://localhost:5000/yerushalmi/diamonds");
+    const ws = new WebSocket("ws://yerushalmi.online/yerushalmi/diamonds");
     ws.onopen = () => {
       console.log("WebSocket connected");
       setWebSocket(ws); // Store WebSocket instance in state
@@ -88,7 +88,7 @@ function ProductsTable({ disabled }) {
       const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.post(
-        "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
+        "https://yerushalmi.online/yerushalmi/diamond/generateHtmlTemplates",
         { vendorStockNumbers: diamonds },
         {
           headers: {
@@ -122,7 +122,7 @@ function ProductsTable({ disabled }) {
       const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.delete(
-        "http://localhost:5000/yerushalmi/diamonds/byVendorStockNumber",
+        "https://yerushalmi.online/yerushalmi/diamonds/byVendorStockNumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -168,7 +168,7 @@ function ProductsTable({ disabled }) {
         Cell: ({ row }) =>
           row.original.HTMLTemplate ? (
             <QRCode
-              value={`http://www.yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}_NEW.html`}
+              value={`https://yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}.html`}
               size={64}
             />
           ) : null,
@@ -178,7 +178,7 @@ function ProductsTable({ disabled }) {
         header: "Vendor Stock Number",
         Cell: ({ row }) => {
           const url = row.original.HTMLTemplate
-            ? `http://www.yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}_NEW.html`
+            ? `https://yerushalmi.online/${row.original.VendorStockNumber.replace(/\./g, "")}.html`
             : "#";
           return (
             <Typography
