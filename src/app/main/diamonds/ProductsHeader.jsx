@@ -43,7 +43,7 @@ function ProductsHeader({ setTableDisabled }) {
       const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.post(
-        "http://localhost:5000/yerushalmi/upload-csv",
+        "http://server.yerushalmi.online/yerushalmi/upload-csv",
         formData,
         {
           headers: {
