@@ -40,9 +40,7 @@ function ProductsTable({ disabled }) {
   useEffect(() => {
     getData(); // Call getData to fetch initial data
     // const token = import.meta.env.VITE_TOKEN;
-    const ws = new WebSocket(
-      "wss://server.yerushalmi.online/yerushalmi/diamonds"
-    );
+    const ws = new WebSocket("wss://server.yerushalmi.online/diamonds");
     ws.onopen = () => {
       console.log("WebSocket connected");
       setWebSocket(ws); // Store WebSocket instance in state
@@ -90,7 +88,7 @@ function ProductsTable({ disabled }) {
       const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.post(
-        "http://server.yerushalmi.online/yerushalmi/diamond/generateHtmlTemplates",
+        "http://server.yerushalmi.online/diamond/generateHtmlTemplates",
         { vendorStockNumbers: diamonds },
         {
           headers: {
@@ -124,7 +122,7 @@ function ProductsTable({ disabled }) {
       const token = import.meta.env.VITE_TOKEN;
 
       const response = await axios.delete(
-        "http://server.yerushalmi.online/yerushalmi/diamonds/byVendorStockNumber",
+        "http://server.yerushalmi.online/diamonds/byVendorStockNumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,
