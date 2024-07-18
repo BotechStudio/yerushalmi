@@ -12,7 +12,6 @@ const AuthService = {
       }
     );
     const { token } = response.data;
-    console.lo("token:", token);
     localStorage.setItem("token", token);
     return response.data;
   },
