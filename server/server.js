@@ -515,6 +515,18 @@ app.delete("/yerushalmi/diamonds", authenticateToken, async (req, res) => {
   }
 });
 
+// Endpoint to quick test if server is online (no auth)
+app.get("/ping", async (req, res) => {
+  try {
+    res.status(200).json({ message: "Yerushalmi server is online! " + new Date().today() + " @ " + new Date().timeNow() });
+  } catch (error) {
+    console.error("Error deleting diamonds:", error);
+    res
+      .status(500)
+      .json({ message: "Failed to delete diamonds", error: error.message });
+  }
+});
+
 // Endpoint to delete all documents from the diamonds_new collection by VendorStockNumber
 
 app.delete(
