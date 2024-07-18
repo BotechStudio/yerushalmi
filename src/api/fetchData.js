@@ -1,16 +1,26 @@
+import AuthService from "src/app/auth/services/AuthService";
+
 const fetchData = async () => {
   try {
-    //need to generate from the SERVER
-    const token = import.meta.env.VITE_TOKEN;
+    const token = AuthService.getToken();
 
-    const response = await fetch("https://server.yerushalmi.online/yerushalmi/diamonds", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    if (!token) {
+      throw new Error("No token found");
+    }
+
+    const response = await fetch(
+      "https://server.yerushalmi.online/yerushalmi/diamonds",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
     const data = await response.json();
     console.log("Fetched data:", data);
     return data;

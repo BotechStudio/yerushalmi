@@ -6,7 +6,9 @@ const cors = require("cors");
 const DiamondNew = require("./models/diamondNew");
 const Color = require("./models/color");
 const Shape = require("./models/shape");
+const User = require("./models/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt"); // Make sure bcrypt is required
 const fs = require("fs");
 const csv = require("csv-parser");
 const FTPClient = require("ftp");
@@ -161,6 +163,74 @@ function downloadLatestCsvFromFTP(callback) {
 const templatePath = path.join(__dirname, "../docs/template.html");
 const template = fs.readFileSync(templatePath, "utf-8");
 // console.log("Template Path:", templatePath);
+
+app.post("/yerushalmi/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+  if (!user) {
+    return res.status(403).json({ message: "Invalid credentials" });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return res.status(403).json({ message: "Invalid credentials" });
+  }
+
+  const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  res.json({ token });
+});
+
+// Register Route
+app.post("/yerushalmi/register", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    // Check if username already exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
+
+    // Hash the plain-text password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+    });
+
+    await newUser.save();
+
+    const token = jwt.sign(
+      { id: newUser._id, username: newUser.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.json({ token });
+  } catch (error) {
+    console.error("Error registering new user:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+//refresh
+app.post("/yerushalmi/auth/refresh", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+
+    const newToken = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.json({ token: newToken });
+  });
+});
 
 // Endpoint to update the HTMLTemplate field
 app.put("/yerushalmi/diamonds/update-html-template", async (req, res) => {

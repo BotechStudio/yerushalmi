@@ -6,9 +6,12 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 // import NavLinkAdapter from "@fuse/core/NavLinkAdapter";
 import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
 import axios from "axios";
-import fetchData from "src/api/fetchData"; /**
+import fetchData from "src/api/fetchData";
+import AuthService from "src/app/auth/services/AuthService"; /**
+
  * The products header.
  */
+
 function ProductsHeader({ setTableDisabled }) {
   const [syncMessage, setSyncMessage] = useState(""); // State for displaying sync status message
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar visibility
@@ -40,10 +43,10 @@ function ProductsHeader({ setTableDisabled }) {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const token = import.meta.env.VITE_TOKEN;
+      const token = AuthService.getToken();
 
       const response = await axios.post(
-        "https://server.yerushalmi.online/upload-csv",
+        "https://server.yerushalmi.online/yerushalmi/upload-csv",
         formData,
         {
           headers: {

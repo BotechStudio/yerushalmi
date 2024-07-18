@@ -1,4 +1,5 @@
 import { useMemo, useEffect, useState } from "react";
+import AuthService from "src/app/auth/services/AuthService";
 import DataTable from "app/shared-components/data-table/DataTable";
 import FuseLoading from "@fuse/core/FuseLoading";
 import { Chip, ListItemIcon, MenuItem, Paper, Snackbar } from "@mui/material";
@@ -38,6 +39,11 @@ function ProductsTable({ disabled }) {
 
   // Fetch initial data on component mount
   useEffect(() => {
+    if (!AuthService.isAuthenticated()) {
+      // Handle not authenticated (redirect to login page or show an error)
+      console.log("Not authenticated");
+      return;
+    }
     getData(); // Call getData to fetch initial data
     // const token = import.meta.env.VITE_TOKEN;
     const ws = new WebSocket("wss://server.yerushalmi.online/diamonds");
@@ -85,8 +91,7 @@ function ProductsTable({ disabled }) {
   const handleSyncAndGenerateHTML = async (diamonds) => {
     console.log("Syncing selected diamonds:", diamonds);
     try {
-      const token = import.meta.env.VITE_TOKEN;
-
+      const token = AuthService.getToken();
       const response = await axios.post(
         "https://server.yerushalmi.online/yerushalmi/diamond/generateHtmlTemplates",
         { vendorStockNumbers: diamonds },
@@ -119,7 +124,7 @@ function ProductsTable({ disabled }) {
   const handleDeleteSelectedDiamonds = async (diamonds) => {
     console.log("Deleting selected diamonds:", diamonds);
     try {
-      const token = import.meta.env.VITE_TOKEN;
+      const token = AuthService.getToken();
 
       const response = await axios.delete(
         "https://server.yerushalmi.online/yerushalmi/diamonds/byVendorStockNumber",
