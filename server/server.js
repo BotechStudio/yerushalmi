@@ -105,6 +105,15 @@ function sanitizeFileName(name) {
   return name.replace(/\./g, "").replace(/[^a-zA-Z0-9-_]/g, "");
 }
 
+// Define the Date prototype methods
+Date.prototype.today = function () {
+  return this.toISOString().split("T")[0]; // returns the date part of the ISO string
+};
+
+Date.prototype.timeNow = function () {
+  return this.toTimeString().split(" ")[0]; // returns the time part of the string
+};
+
 // Function to download the most recent CSV file from FTP and save locally
 function downloadLatestCsvFromFTP(callback) {
   const client = new FTPClient();
@@ -377,6 +386,7 @@ app.post(
   authenticateToken,
   async (req, res) => {
     const { vendorStockNumbers } = req.body;
+    console.log("vendorStockNumbers:", vendorStockNumbers);
 
     if (!Array.isArray(vendorStockNumbers) || vendorStockNumbers.length === 0) {
       return res
@@ -518,15 +528,20 @@ app.delete("/yerushalmi/diamonds", authenticateToken, async (req, res) => {
 // Endpoint to quick test if server is online (no auth)
 app.get("/ping", async (req, res) => {
   try {
-    res.status(200).json({ message: "Yerushalmi server is online! " + new Date().today() + " @ " + new Date().timeNow() });
+    res.status(200).json({
+      message:
+        "Yerushalmi server is online! " +
+        new Date().today() +
+        " @ " +
+        new Date().timeNow(),
+    });
   } catch (error) {
-    console.error("Error deleting diamonds:", error);
+    console.error("Error:", error);
     res
       .status(500)
-      .json({ message: "Failed to delete diamonds", error: error.message });
+      .json({ message: "Failed to process request", error: error.message });
   }
 });
-
 // Endpoint to delete all documents from the diamonds_new collection by VendorStockNumber
 
 app.delete(
