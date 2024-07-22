@@ -422,7 +422,6 @@ app.post(
   }
 );
 
-// Endpoint to generate HTML templates for multiple diamonds
 app.post(
   "/yerushalmi/diamond/generateHtmlTemplates",
   authenticateToken,
@@ -437,13 +436,11 @@ app.post(
     }
 
     try {
-      // Pull the latest changes from the repository
-      // await git.pull("origin", "main");
-
       const diamonds = await DiamondNew.find({
         VendorStockNumber: { $in: vendorStockNumbers },
       }).lean();
 
+      const filesToAdd = [];
       for (const diamond of diamonds) {
         // Generate HTML if not already present or is false
         if (!diamond.HTMLTemplate || diamond.HTMLTemplate === false) {
@@ -463,34 +460,31 @@ app.post(
           // Write the HTML file to the specified path
           fs.writeFileSync(htmlFilePath, htmlContent, "utf-8");
 
+          // Add file path to the list of files to add to git
+          filesToAdd.push(htmlFilePath);
+
           // Update HTMLTemplate field to true
           await DiamondNew.updateOne(
             { _id: diamond._id },
             { HTMLTemplate: true }
           );
+        }
+      }
 
-          try {
-            // Stage, commit, and push the changes using simple-git
-            await git.add(htmlFilePath);
-            await git.commit(
-              `Add HTML template for ${diamond.VendorStockNumber}`
-            );
-            await git.push("origin", "main");
-            // Update HTMLTemplate field to true
-            await DiamondNew.updateOne(
-              { _id: diamond._id },
-              { HTMLTemplate: true }
-            );
-          } catch (gitError) {
-            console.error(
-              `Error during git operations for ${diamond.VendorStockNumber}:`,
-              gitError
-            );
-            res.status(500).json({
-              message: `Git operations failed for ${diamond.VendorStockNumber}`,
-            });
-            return;
-          }
+      if (filesToAdd.length > 0) {
+        try {
+          // Stage all the new files
+          await git.add(filesToAdd);
+          // Commit the changes
+          await git.commit("Add HTML templates");
+          // Push the changes
+          await git.push("origin", "main");
+        } catch (gitError) {
+          console.error("Error during git operations:", gitError);
+          return res.status(500).json({
+            message: "Git operations failed",
+            error: gitError.message,
+          });
         }
       }
 
