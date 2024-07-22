@@ -305,14 +305,32 @@ function processCsvAndSaveToMongo() {
         PolishedVideo: row["Polished Video"], // Map "Polished Video" to "PolishedVideo"
       };
 
-      generateHtml(mappedRow); // Generate and save the HTML template
-      mappedRow.HTMLTemplate = true;
+      // generateHtml(mappedRow); // Generate and save the HTML template
+      mappedRow.HTMLTemplate = false;
       results.push(mappedRow);
     })
     .on("end", async () => {
       try {
-        await DiamondNew.insertMany(results);
-        console.log("Data successfully saved to MongoDB");
+        const insertedDiamonds = [];
+        for (const diamond of results) {
+          const existingDiamond = await DiamondNew.findOne({
+            VendorStockNumber: diamond.VendorStockNumber,
+          });
+          if (!existingDiamond) {
+            const newDiamond = await DiamondNew.create(diamond);
+            insertedDiamonds.push(newDiamond);
+            console.log(
+              `Inserted diamond with VendorStockNumber: ${diamond.VendorStockNumber}`
+            );
+          } else {
+            console.log(
+              `Skipped existing diamond with VendorStockNumber: ${diamond.VendorStockNumber}`
+            );
+          }
+        }
+        const updatedList = await DiamondNew.find({});
+        callback(null, { insertedDiamonds, updatedList });
+        console.log("Data processing completed");
       } catch (error) {
         console.error("Error saving data to MongoDB:", error);
       }
@@ -354,18 +372,38 @@ app.post(
 
         // generateHtml(mappedRow); // Generate and save the HTML template
         mappedRow.HTMLTemplate = false;
+
         results.push(mappedRow);
       })
+
       .on("end", async () => {
         try {
-          await DiamondNew.insertMany(results);
-          console.log("Data successfully saved to MongoDB");
+          const insertedDiamonds = [];
+          for (const diamond of results) {
+            const existingDiamond = await DiamondNew.findOne({
+              VendorStockNumber: diamond.VendorStockNumber,
+            });
+            console.log("existing Diamond:", existingDiamond);
+            if (!existingDiamond) {
+              const newDiamond = await DiamondNew.create(diamond);
+              console.log("new Diamond:", newDiamond);
+              insertedDiamonds.push(newDiamond);
+              console.log(
+                `Inserted diamond with VendorStockNumber: ${diamond.VendorStockNumber}`
+              );
+            } else {
+              console.log(
+                `Skipped existing diamond with VendorStockNumber: ${diamond.VendorStockNumber}`
+              );
+            }
+          }
           const updatedList = await DiamondNew.find({});
           broadcast({ message: "Data updated", data: updatedList });
           res.status(200).json({
             message: "File uploaded and processing started",
             data: updatedList,
           });
+          console.log("Data processing completed");
         } catch (error) {
           console.error("Error saving data to MongoDB:", error);
           res.status(500).json({
@@ -373,6 +411,10 @@ app.post(
             error,
           });
         }
+        // Optionally, delete the uploaded file to free up disk space
+        fs.unlink(filePath, (err) => {
+          if (err) console.error("Error deleting file:", err);
+        });
       });
 
     // processCsvAndSaveToMongo(filePath);
