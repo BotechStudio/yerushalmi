@@ -578,7 +578,7 @@ app.get("/ping", async (req, res) => {
       .json({ message: "Failed to process request", error: error.message });
   }
 });
-// Endpoint to delete all documents from the diamonds_new collection by VendorStockNumber
+// // Endpoint to delete all documents from the diamonds_new collection by VendorStockNumber
 
 app.delete(
   "/yerushalmi/diamonds/byVendorStockNumber",
@@ -593,11 +593,51 @@ app.delete(
     }
 
     try {
+      // Fetch the diamonds to get their HTML filenames
+      const diamonds = await DiamondNew.find({
+        VendorStockNumber: { $in: VendorStockNumbers },
+      }).lean();
+
+      // Collect the paths of the HTML files to delete
+      const filesToDelete = diamonds.map((diamond) =>
+        path.join(
+          __dirname,
+          `../docs/${sanitizeFileName(diamond.VendorStockNumber)}.html`
+        )
+      );
+
+      // Delete the diamonds from the database
       const result = await DiamondNew.deleteMany({
         VendorStockNumber: { $in: VendorStockNumbers },
       });
+
+      // Delete the HTML files from the filesystem
+      for (const filePath of filesToDelete) {
+        console.log("filePath:", filePath);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+      }
+
+      if (filesToDelete.length > 0) {
+        try {
+          // Stage the deleted files
+          await git.rm(filesToDelete);
+          // Commit the changes
+          await git.commit("Delete HTML templates");
+          // Push the changes
+          await git.push("origin", "main");
+        } catch (gitError) {
+          console.error("Error during git operations:", gitError);
+          return res.status(500).json({
+            message: "Git operations failed",
+            error: gitError.message,
+          });
+        }
+      }
+
       res.status(200).json({
-        message: `${result.deletedCount} diamonds deleted successfully`,
+        message: `${result.deletedCount} diamonds and their HTML templates deleted successfully`,
       });
     } catch (error) {
       console.error("Error deleting diamonds:", error);
@@ -607,6 +647,34 @@ app.delete(
     }
   }
 );
+
+// app.delete(
+//   "/yerushalmi/diamonds/byVendorStockNumber",
+//   authenticateToken,
+//   async (req, res) => {
+//     const { VendorStockNumbers } = req.body;
+
+//     if (!VendorStockNumbers || !Array.isArray(VendorStockNumbers)) {
+//       return res
+//         .status(400)
+//         .json({ message: "VendorStockNumbers array is required" });
+//     }
+
+//     try {
+//       const result = await DiamondNew.deleteMany({
+//         VendorStockNumber: { $in: VendorStockNumbers },
+//       });
+//       res.status(200).json({
+//         message: `${result.deletedCount} diamonds deleted successfully`,
+//       });
+//     } catch (error) {
+//       console.error("Error deleting diamonds:", error);
+//       res
+//         .status(500)
+//         .json({ message: "Failed to delete diamonds", error: error.message });
+//     }
+//   }
+// );
 
 //the all colors from the mongoDB
 app.get("/yerushalmi/colors", async (req, res) => {
