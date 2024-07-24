@@ -750,6 +750,7 @@ app.post("/yerushalmi/diamonds", async (req, res) => {
 });
 
 app.get("/yerushalmi/export-diamonds", authenticateToken, async (req, res) => {
+  console.log("res", res);
   try {
     const diamonds = await DiamondNew.find({}).lean();
 
