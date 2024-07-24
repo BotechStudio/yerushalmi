@@ -18,6 +18,7 @@ const multer = require("multer");
 const simpleGit = require("simple-git");
 const http = require("http");
 const WebSocket = require("ws");
+const { Parser } = require("json2csv");
 
 const app = express();
 connectDB();
@@ -745,6 +746,40 @@ app.post("/yerushalmi/diamonds", async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to create diamond", error: error.message });
+  }
+});
+
+app.get("/yerushalmi/export-diamonds", authenticateToken, async (req, res) => {
+  try {
+    const diamonds = await DiamondNew.find({}).lean();
+
+    const fields = [
+      "VendorStockNumber",
+      "Shape",
+      "Weight",
+      "Color",
+      "Clarity",
+      "Cut",
+      "Polish",
+      "Symmetry",
+      "FluorescenceIntensity",
+      "Lab",
+      "ROUGH_CT",
+      "ROUGH_DATE",
+      "CertificateUrl",
+      "RoughVideo",
+      "PolishedVideo",
+      "HTMLTemplate",
+    ];
+    const json2csvParser = new Parser({ fields });
+    const csv = json2csvParser.parse(diamonds);
+
+    res.header("Content-Type", "text/csv");
+    res.attachment("diamonds.csv");
+    res.send(csv);
+  } catch (error) {
+    console.error("Error exporting diamonds:", error);
+    res.status(500).json({ message: "Error exporting diamonds", error });
   }
 });
 

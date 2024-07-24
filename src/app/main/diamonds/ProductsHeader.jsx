@@ -7,10 +7,11 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
 import axios from "axios";
 import fetchData from "src/api/fetchData";
-import AuthService from "src/app/auth/services/AuthService"; /**
+import AuthService from "src/app/auth/services/AuthService";
+import { saveAs } from "file-saver";
 
- * The products header.
- */
+//  * The products header.
+//  */
 
 function ProductsHeader({ setTableDisabled }) {
   const [syncMessage, setSyncMessage] = useState(""); // State for displaying sync status message
@@ -76,6 +77,27 @@ function ProductsHeader({ setTableDisabled }) {
     }
   };
 
+  const handleExport = async () => {
+    try {
+      const token = AuthService.getToken();
+      const response = await axios.get(
+        "https://server.yerushalmi.online/yerushalmi/export-diamonds",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob", // Important for handling binary data
+        }
+      );
+      const blob = new Blob([response.data], {
+        type: "text/csv;charset=utf-8",
+      });
+      saveAs(blob, "diamonds.csv");
+    } catch (error) {
+      console.error("Error exporting diamonds:", error);
+    }
+  };
+
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
   return (
     <div className="flex space-y-12 sm:space-y-0 flex-1 w-full items-center justify-between py-8 sm:py-16 px-16 md:px-24">
@@ -126,6 +148,11 @@ function ProductsHeader({ setTableDisabled }) {
           </FuseSvgIcon>
           <span className="ml-2">Download CSV Template</span>
         </a>
+        {/* Export Button */}
+        <Button variant="contained" color="secondary" onClick={handleExport}>
+          <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
+          <span className="mx-4 sm:mx-8">Export Table</span>
+        </Button>
       </div>
     </div>
   );
