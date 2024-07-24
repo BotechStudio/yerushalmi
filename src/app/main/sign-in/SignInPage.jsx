@@ -4,6 +4,8 @@ import Paper from "@mui/material/Paper";
 import CardContent from "@mui/material/CardContent";
 import Alert from "@mui/material/Alert";
 import JwtSignInTab from "./tabs/JwtSignInTab";
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 
 function SignInPage() {
   return (
@@ -24,6 +26,9 @@ function SignInPage() {
             documents.
           </Alert>
           <JwtSignInTab />
+          <Typography className="mt-32 text-center text-4xl font-extrabold leading-tight tracking-tight">
+            Don't have an account? <Link to="/sign-up">Sign Up</Link>
+          </Typography>
         </CardContent>
       </Paper>
       <Box

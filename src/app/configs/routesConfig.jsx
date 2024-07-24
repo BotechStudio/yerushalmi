@@ -26,7 +26,7 @@ const routes = [
   ),
   {
     path: "/",
-    element: <Navigate to="/diamonds" />,
+    element: <Navigate to="/sign-in" />,
     auth: settingsConfig.defaultAuth,
   },
   {

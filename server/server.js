@@ -18,6 +18,7 @@ const multer = require("multer");
 const simpleGit = require("simple-git");
 const http = require("http");
 const WebSocket = require("ws");
+const { Parser } = require("json2csv");
 
 const app = express();
 connectDB();
@@ -63,6 +64,51 @@ wss.on("connection", (ws) => {
 
 // Local path to save the downloaded CSV file
 const localCsvPath = path.join(__dirname, "/data_ftp/data_new.csv"); // Ensure the file is saved in the current directory
+
+async function generateHtmlTemplates(diamonds) {
+  const filesToAdd = [];
+
+  for (const diamond of diamonds) {
+    // Generate HTML if not already present or is false
+    if (!diamond.HTMLTemplate || diamond.HTMLTemplate === false) {
+      console.log("diamond:", diamond);
+      const htmlContent = generateHtml(diamond);
+
+      // Sanitize the filename
+      const sanitizedFileName = sanitizeFileName(
+        `${diamond.VendorStockNumber}`
+      );
+      // Define the path for the HTML file../docs/template.html
+      const htmlFilePath = path.join(
+        __dirname,
+        `../docs/${sanitizedFileName}.html`
+      );
+
+      // Write the HTML file to the specified path
+      fs.writeFileSync(htmlFilePath, htmlContent, "utf-8");
+
+      // Add file path to the list of files to add to git
+      filesToAdd.push(htmlFilePath);
+
+      // Update HTMLTemplate field to true
+      await DiamondNew.updateOne({ _id: diamond._id }, { HTMLTemplate: true });
+    }
+  }
+
+  if (filesToAdd.length > 0) {
+    try {
+      // Stage all the new files
+      await git.add(filesToAdd);
+      // Commit the changes
+      await git.commit("Add HTML templates");
+      // Push the changes
+      await git.push("origin", "main");
+    } catch (gitError) {
+      console.error("Error during git operations:", gitError);
+      throw new Error("Git operations failed: " + gitError.message);
+    }
+  }
+}
 
 // Function to download CSV file from FTP and save locally
 // function downloadCsvFromFTP(callback) {
@@ -371,7 +417,7 @@ app.post(
         };
 
         // generateHtml(mappedRow); // Generate and save the HTML template
-        mappedRow.HTMLTemplate = false;
+        // mappedRow.HTMLTemplate = false;
 
         results.push(mappedRow);
       })
@@ -396,6 +442,10 @@ app.post(
                 `Skipped existing diamond with VendorStockNumber: ${diamond.VendorStockNumber}`
               );
             }
+          }
+          // Generate HTML templates for new diamonds
+          if (insertedDiamonds.length > 0) {
+            await generateHtmlTemplates(insertedDiamonds);
           }
           const updatedList = await DiamondNew.find({});
           broadcast({ message: "Data updated", data: updatedList });
@@ -440,53 +490,7 @@ app.post(
         VendorStockNumber: { $in: vendorStockNumbers },
       }).lean();
 
-      const filesToAdd = [];
-      for (const diamond of diamonds) {
-        // Generate HTML if not already present or is false
-        if (!diamond.HTMLTemplate || diamond.HTMLTemplate === false) {
-          console.log("diamond:", diamond);
-          const htmlContent = generateHtml(diamond);
-
-          // Sanitize the filename
-          const sanitizedFileName = sanitizeFileName(
-            `${diamond.VendorStockNumber}`
-          );
-          // Define the path for the HTML file../docs/template.html
-          const htmlFilePath = path.join(
-            __dirname,
-            `../docs/${sanitizedFileName}.html`
-          );
-
-          // Write the HTML file to the specified path
-          fs.writeFileSync(htmlFilePath, htmlContent, "utf-8");
-
-          // Add file path to the list of files to add to git
-          filesToAdd.push(htmlFilePath);
-
-          // Update HTMLTemplate field to true
-          await DiamondNew.updateOne(
-            { _id: diamond._id },
-            { HTMLTemplate: true }
-          );
-        }
-      }
-
-      if (filesToAdd.length > 0) {
-        try {
-          // Stage all the new files
-          await git.add(filesToAdd);
-          // Commit the changes
-          await git.commit("Add HTML templates");
-          // Push the changes
-          await git.push("origin", "main");
-        } catch (gitError) {
-          console.error("Error during git operations:", gitError);
-          return res.status(500).json({
-            message: "Git operations failed",
-            error: gitError.message,
-          });
-        }
-      }
+      await generateHtmlTemplates(diamonds);
 
       res.json({ message: "HTML templates generated and saved successfully" });
     } catch (error) {
@@ -742,6 +746,41 @@ app.post("/yerushalmi/diamonds", async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to create diamond", error: error.message });
+  }
+});
+
+app.get("/yerushalmi/export-diamonds", authenticateToken, async (req, res) => {
+  console.log("res", res);
+  try {
+    const diamonds = await DiamondNew.find({}).lean();
+
+    const fields = [
+      "VendorStockNumber",
+      "Shape",
+      "Weight",
+      "Color",
+      "Clarity",
+      "Cut",
+      "Polish",
+      "Symmetry",
+      "FluorescenceIntensity",
+      "Lab",
+      "ROUGH_CT",
+      "ROUGH_DATE",
+      "CertificateUrl",
+      "RoughVideo",
+      "PolishedVideo",
+      "HTMLTemplate",
+    ];
+    const json2csvParser = new Parser({ fields });
+    const csv = json2csvParser.parse(diamonds);
+
+    res.header("Content-Type", "text/csv");
+    res.attachment("diamonds.csv");
+    res.send(csv);
+  } catch (error) {
+    console.error("Error exporting diamonds:", error);
+    res.status(500).json({ message: "Error exporting diamonds", error });
   }
 });
 

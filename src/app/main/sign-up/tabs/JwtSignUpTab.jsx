@@ -9,31 +9,30 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import UserModel from "src/app/auth/user/models/UserModel"; // Import UserModel
 
-function JwtSignInTab() {
+function JwtSignUpTab() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleSignUp = async () => {
     try {
-      const response = await AuthService.login(username, password);
+      const response = await AuthService.register(username, password);
       const user = jwtDecode(response.token);
       const userModel = UserModel(user); // Create user model with the decoded token
-      console.log("userModel", userModel);
-      dispatch(setUser(user));
-      navigate("/diamonds"); // Redirect to /diamonds after successful login
+      dispatch(setUser(userModel));
+      navigate("/sign-in"); // Redirect to /diamonds after successful sign-up
     } catch (error) {
-      console.error("Login failed", error);
-      setError("Login failed. Please check your credentials and try again.");
+      console.error("Sign-Up failed", error);
+      setError("Sign-Up failed. Please check your details and try again.");
     }
   };
 
   return (
     <div>
       <Typography className="mb-24" variant="h6">
-        Sign in with JWT
+        Sign up with JWT
       </Typography>
       <TextField
         label="Username"
@@ -57,11 +56,11 @@ function JwtSignInTab() {
           {error}
         </Typography>
       )}
-      <Button variant="contained" color="primary" onClick={handleLogin}>
-        Sign In
+      <Button variant="contained" color="primary" onClick={handleSignUp}>
+        Sign Up
       </Button>
     </div>
   );
 }
 
-export default JwtSignInTab;
+export default JwtSignUpTab;

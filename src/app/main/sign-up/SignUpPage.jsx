@@ -5,9 +5,11 @@ import Paper from "@mui/material/Paper";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState } from "react";
-import JwtSignInTab from "../sign-in/tabs/JwtSignInTab";
+import JwtSignUpTab from "./tabs/JwtSignUpTab";
 import FirebaseSignUpTab from "./tabs/FirebaseSignUpTab";
 import AwsSignUpTab from "./tabs/AwsSignUpTab";
+import Avatar from "@mui/material/Avatar"; // Import Avatar
+import AvatarGroup from "@mui/material/AvatarGroup"; // Import AvatarGroup
 
 const tabs = [
   {
