@@ -30,7 +30,7 @@
         "apexcharts": "3.45.1",
         "autosuggest-highlight": "3.3.4",
         "aws-amplify": "^6.0.25",
-        "axios": "1.6.5",
+        "axios": "^1.7.7",
         "axios-mock-adapter": "1.21.5",
         "clsx": "2.1.0",
         "core-js": "3.35.0",

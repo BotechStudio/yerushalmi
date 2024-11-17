@@ -98,6 +98,66 @@ function ProductsHeader({ setTableDisabled }) {
     }
   };
 
+  const handleUpdateChanges = async () => {
+    console.log("Hey");
+    try {
+      const token = AuthService.getToken();
+      const response = await axios.post(
+        "http://localhost:5000/yerushalmi/diamond/update-changes",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Update changes response:", response);
+
+      if (
+        response.data.changedDiamonds &&
+        response.data.changedDiamonds.length > 0
+      ) {
+        // Handle success message or further actions as needed
+        setSyncMessage(response.data.message);
+        setSnackbarOpen(true);
+        // Optionally, refresh data after successful update
+        getData();
+      } else {
+        // Handle case where no changes were detected
+        setSyncMessage("No changes detected in diamonds");
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error("Error updating changes:", error);
+
+      // Handle error message or further actions as needed
+      setSyncMessage("Failed to update changes");
+      setSnackbarOpen(true);
+    }
+  };
+  const handleDownloadFromFTP = async () => {
+    try {
+      const token = AuthService.getToken();
+      const response = await axios.get(
+        "http://localhost:5000/yerushalmi/download-ftp-file", // Ensure this matches the server endpoint
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob", // Ensures binary data is handled correctly
+        }
+      );
+
+      const blob = new Blob([response.data], {
+        type: "text/csv;charset=utf-8",
+      });
+      saveAs(blob, "CSV_template.csv"); // Set the downloaded file name
+    } catch (error) {
+      console.error("Error downloading CSV template from FTP:", error);
+    }
+  };
+
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
   return (
     <div className="flex space-y-12 sm:space-y-0 flex-1 w-full items-center justify-between py-8 sm:py-16 px-16 md:px-24">
@@ -110,49 +170,60 @@ function ProductsHeader({ setTableDisabled }) {
         </Typography>
       </motion.span>
 
-      <div className="flex flex-1 items-center justify-end space-x-8">
-        <motion.div
-          className="flex flex-grow-0"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
-        >
-          <input
-            type="file"
-            accept=".csv"
-            onChange={handleFileSelect}
-            className="hidden"
-            id="file-upload"
-          />
-          <label htmlFor="file-upload">
-            <Button
-              variant="contained"
-              color="secondary"
-              component="span"
-              disabled={uploading}
-            >
-              <FuseSvgIcon size={20}>heroicons-outline:plus</FuseSvgIcon>
-              <span className="mx-4 sm:mx-8">
-                {uploading ? "Uploading..." : "Import CSV"}
-              </span>
-            </Button>
-          </label>
-        </motion.div>
-        {/* Link to download CSV template */}
-        <a
-          href="/docs/CSV_template.csv"
-          download="CSV_template.csv"
-          className="flex items-center text-blue-500 hover:underline"
-        >
-          <FuseSvgIcon size={20}>
-            heroicons-outline:document-download
-          </FuseSvgIcon>
-          <span className="ml-2">Download CSV Template</span>
-        </a>
-        {/* Export Button */}
-        <Button variant="contained" color="secondary" onClick={handleExport}>
-          <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
-          <span className="mx-4 sm:mx-8">Export Table</span>
-        </Button>
+      <div className="flex flex-col flex-1 items-center justify-end space-y-8">
+        {/* First Row: Import CSV and Export Table */}
+        <div className="flex flex-1 items-center justify-end space-x-8">
+          <motion.div
+            className="flex flex-grow-0"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
+          >
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileSelect}
+              className="hidden"
+              id="file-upload"
+            />
+            <label htmlFor="file-upload">
+              <Button
+                variant="contained"
+                color="secondary"
+                component="span"
+                disabled={uploading}
+              >
+                <FuseSvgIcon size={20}>heroicons-outline:plus</FuseSvgIcon>
+                <span className="mx-4 sm:mx-8">
+                  {uploading ? "Uploading..." : "Import CSV"}
+                </span>
+              </Button>
+            </label>
+          </motion.div>
+          <Button variant="contained" color="secondary" onClick={handleExport}>
+            <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
+            <span className="mx-4 sm:mx-8">Export Table</span>
+          </Button>
+        </div>
+
+        {/* Second Row: Download CSV Template and Update Changes */}
+        <div className="flex flex-1 items-center justify-end space-x-8">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleDownloadFromFTP}
+          >
+            <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
+            <span className="mx-4 sm:mx-8">Download CSV Template</span>
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdateChanges}
+          >
+            <FuseSvgIcon size={20}>heroicons-outline:refresh</FuseSvgIcon>
+            <span className="mx-4 sm:mx-8">Update Changes</span>
+          </Button>
+        </div>
       </div>
     </div>
   );
