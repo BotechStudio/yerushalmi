@@ -136,27 +136,27 @@ function ProductsHeader({ setTableDisabled }) {
       setSnackbarOpen(true);
     }
   };
-  const handleDownloadFromFTP = async () => {
-    try {
-      const token = AuthService.getToken();
-      const response = await axios.get(
-        "http://localhost:5000/yerushalmi/download-ftp-file", // Ensure this matches the server endpoint
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob", // Ensures binary data is handled correctly
-        }
-      );
+  // const handleDownloadFromFTP = async () => {
+  //   try {
+  //     const token = AuthService.getToken();
+  //     const response = await axios.get(
+  //       "http://localhost:5000/yerushalmi/download-ftp-file", // Ensure this matches the server endpoint
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //         responseType: "blob", // Ensures binary data is handled correctly
+  //       }
+  //     );
 
-      const blob = new Blob([response.data], {
-        type: "text/csv;charset=utf-8",
-      });
-      saveAs(blob, "CSV_template.csv"); // Set the downloaded file name
-    } catch (error) {
-      console.error("Error downloading CSV template from FTP:", error);
-    }
-  };
+  //     const blob = new Blob([response.data], {
+  //       type: "text/csv;charset=utf-8",
+  //     });
+  //     saveAs(blob, "CSV_template.csv"); // Set the downloaded file name
+  //   } catch (error) {
+  //     console.error("Error downloading CSV template from FTP:", error);
+  //   }
+  // };
 
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
   return (
@@ -211,11 +211,26 @@ function ProductsHeader({ setTableDisabled }) {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleDownloadFromFTP}
+            sx={{
+              color: "white", // Ensure the text is white
+              "& .MuiSvgIcon-root": {
+                color: "white", // Ensures icons inside the button are also white
+              },
+            }}
           >
-            <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
-            <span className="mx-4 sm:mx-8">Download CSV Template</span>
+            <a
+              href="https://www.yerushalmi.online/CSV_template.csv"
+              download="CSV_template.csv"
+              className="flex items-center text-white no-underline"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <FuseSvgIcon size={20}>
+                heroicons-outline:document-download
+              </FuseSvgIcon>
+              <span className="ml-2">Download CSV Template</span>
+            </a>
           </Button>
+
           {/* <Button
             variant="contained"
             color="primary"
