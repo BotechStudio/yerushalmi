@@ -160,7 +160,7 @@ function ProductsHeader({ setTableDisabled }) {
 
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
   return (
-    <div className="flex space-y-12 sm:space-y-0 flex-1 w-full items-center justify-between py-8 sm:py-16 px-16 md:px-24">
+    <div className="flex flex-1 w-full items-center justify-between py-8 sm:py-16 px-16 md:px-24 space-y-8 flex-col sm:flex-row">
       <motion.span
         initial={{ x: -20 }}
         animate={{ x: 0, transition: { delay: 0.2 } }}
@@ -172,7 +172,7 @@ function ProductsHeader({ setTableDisabled }) {
 
       <div className="flex flex-col flex-1 items-center justify-end space-y-8">
         {/* First Row: Import CSV and Export Table */}
-        <div className="flex flex-1 items-center justify-end space-x-8">
+        <div className="flex flex-row flex-wrap items-center justify-end space-x-8">
           <motion.div
             className="flex flex-grow-0"
             initial={{ opacity: 0, x: 20 }}
@@ -199,14 +199,15 @@ function ProductsHeader({ setTableDisabled }) {
               </Button>
             </label>
           </motion.div>
+
           <Button variant="contained" color="secondary" onClick={handleExport}>
             <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
             <span className="mx-4 sm:mx-8">Export Table</span>
           </Button>
         </div>
 
-        {/* Second Row: Download CSV Template and Update Changes */}
-        <div className="flex flex-1 items-center justify-end space-x-8">
+        {/* Second Row: Download CSV Template */}
+        <div className="flex flex-row items-center justify-end">
           <Button
             variant="contained"
             color="primary"
@@ -215,14 +216,14 @@ function ProductsHeader({ setTableDisabled }) {
             <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
             <span className="mx-4 sm:mx-8">Download CSV Template</span>
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             color="primary"
             onClick={handleUpdateChanges}
           >
             <FuseSvgIcon size={20}>heroicons-outline:refresh</FuseSvgIcon>
             <span className="mx-4 sm:mx-8">Update Changes</span>
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>

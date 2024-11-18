@@ -19,6 +19,7 @@ const simpleGit = require("simple-git");
 const http = require("http");
 const WebSocket = require("ws");
 const { Parser } = require("json2csv");
+const ftp = require("basic-ftp");
 
 const app = express();
 connectDB();
@@ -149,6 +150,32 @@ async function generateHtmlTemplates(diamonds) {
 // Function to sanitize the file name
 function sanitizeFileName(name) {
   return name.replace(/\./g, "").replace(/[^a-zA-Z0-9-_]/g, "");
+}
+// Function to download a file from FTP
+async function downloadFileFromFTP(remoteFilePath, localFilePath) {
+  const client = new ftp.Client();
+  client.ftp.verbose = true; // Optional: enable logging
+
+  try {
+    await client.access({
+      host: process.env.FTP_HOST,
+      user: process.env.FTP_USER,
+      password: process.env.FTP_PASSWORD,
+      secure: true,
+      secureOptions: {
+        rejectUnauthorized: false, // Bypass certificate validation
+      },
+    });
+
+    console.log(`Connected to FTP server. Downloading ${remoteFilePath}...`);
+    await client.downloadTo(localFilePath, remoteFilePath);
+    console.log(`File downloaded to ${localFilePath}`);
+  } catch (err) {
+    console.error("FTP error:", err);
+    throw err;
+  } finally {
+    client.close();
+  }
 }
 
 // Define the Date prototype methods
@@ -325,6 +352,33 @@ function generateHtml(data) {
   return html;
 }
 
+//function to detect changes and generate HTML templates:
+async function detectChangesAndGenerateHtml() {
+  const diamonds = await DiamondNew.find({}).lean();
+  const changedDiamonds = [];
+
+  for (const diamond of diamonds) {
+    const storedDiamond = await DiamondNew.findOne({
+      VendorStockNumber: diamond.VendorStockNumber,
+    }).lean();
+    if (!storedDiamond) continue;
+
+    const hasChanged = Object.keys(diamond).some((key) => {
+      return diamond[key] !== storedDiamond[key];
+    });
+
+    if (hasChanged) {
+      changedDiamonds.push(diamond);
+    }
+  }
+
+  if (changedDiamonds.length > 0) {
+    await generateHtmlTemplates(changedDiamonds);
+  }
+
+  return changedDiamonds;
+}
+
 // Function to process the CSV file and save data to MongoDB
 function processCsvAndSaveToMongo() {
   const results = [];
@@ -495,6 +549,33 @@ app.post(
       res.json({ message: "HTML templates generated and saved successfully" });
     } catch (error) {
       console.error("Error generating HTML templates:", error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
+app.post(
+  "/yerushalmi/diamond/update-changes",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const changedDiamonds = await detectChangesAndGenerateHtml();
+
+      if (changedDiamonds.length > 0) {
+        // Update the changed diamonds in the database
+        for (const diamond of changedDiamonds) {
+          await DiamondNew.updateOne({ _id: diamond._id }, diamond);
+        }
+        res.json({
+          message:
+            "HTML templates for changed diamonds generated and saved successfully",
+          changedDiamonds,
+        });
+      } else {
+        res.json({ message: "No changes detected in diamonds" });
+      }
+    } catch (error) {
+      console.error("Error updating and generating HTML templates:", error);
       res.status(500).json({ message: error.message });
     }
   }
@@ -783,6 +864,42 @@ app.get("/yerushalmi/export-diamonds", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Error exporting diamonds", error });
   }
 });
+
+// Endpoint to download the CSV_template.csv file from FTP and send it to the client
+app.get(
+  "/yerushalmi/download-ftp-file",
+  authenticateToken,
+  async (req, res) => {
+    const remoteFilePath = "CSV_template.csv"; // Replace with the exact path on your FTP server
+    const localFilePath = path.join(__dirname, "downloads", "CSV_template.csv"); // Temporary local file path
+
+    try {
+      // Ensure the downloads directory exists
+      if (!fs.existsSync(path.join(__dirname, "downloads"))) {
+        fs.mkdirSync(path.join(__dirname, "downloads"));
+      }
+
+      // Download the specific file from FTP
+      await downloadFileFromFTP(remoteFilePath, localFilePath);
+
+      // Send the file to the client for download
+      res.download(localFilePath, "CSV_template.csv", (err) => {
+        if (err) {
+          console.error("Error sending file:", err);
+          res.status(500).send("Error downloading the file.");
+        } else {
+          // Delete the local file after download
+          fs.unlinkSync(localFilePath);
+        }
+      });
+    } catch (error) {
+      console.error("Error downloading file from FTP:", error);
+      res
+        .status(500)
+        .json({ message: "Failed to download the CSV template file." });
+    }
+  }
+);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
