@@ -43,6 +43,10 @@ const ftpConfig = {
   host: process.env.FTP_HOST,
   user: process.env.FTP_USER,
   password: process.env.FTP_PASSWORD,
+  secure: true, // Enable encryption for the connection
+  secureOptions: {
+    rejectUnauthorized: false, // Allow self-signed certificates, if necessary
+  },
 };
 
 const git = simpleGit();
@@ -162,9 +166,9 @@ async function downloadFileFromFTP(remoteFilePath, localFilePath) {
       user: process.env.FTP_USER,
       password: process.env.FTP_PASSWORD,
       secure: true,
-      secureOptions: {
-        rejectUnauthorized: false, // Bypass certificate validation
-      },
+      // secureOptions: {
+      //   rejectUnauthorized: false, // Bypass certificate validation
+      // },
     });
 
     console.log(`Connected to FTP server. Downloading ${remoteFilePath}...`);
@@ -333,7 +337,10 @@ app.put("/yerushalmi/diamonds/update-html-template", async (req, res) => {
 
 // Function to replace placeholders with actual data
 function generateHtml(data) {
-  console.log("data:", data);
+  // Check if required fields are present
+  const requiredFields = ["StockNumber", "Price", "Style"];
+  const hasRequiredFields = requiredFields.every((field) => data[field]);
+
   if (moment(data.ROUGH_DATE, "DD/MM/YYYY", true).isValid()) {
     data.ROUGH_DATE = moment(data.ROUGH_DATE, "DD/MM/YYYY").format(
       "MMMM D, YYYY"
@@ -349,6 +356,15 @@ function generateHtml(data) {
     // Replace the placeholder with the corresponding value, handling special characters
     html = html.split(placeholder).join(value || "");
   });
+  // Show or hide the new section
+  if (hasRequiredFields) {
+    console.log("hey hey");
+    html = html.replace(
+      '<section id="additional-diamond-info" class="section more-info-section" style="display: none;">',
+      '<section id="additional-diamond-info" class="section more-info-section">'
+    );
+  }
+
   return html;
 }
 
@@ -380,15 +396,23 @@ async function detectChangesAndGenerateHtml() {
 }
 
 // Function to process the CSV file and save data to MongoDB
-function processCsvAndSaveToMongo() {
+function processCsvAndSaveToMongo(callback) {
   const results = [];
+
+  // Function to sanitize fields by removing unwanted characters
+  function sanitizeField(value) {
+    if (typeof value === "string") {
+      return value.replace(/[\/\\.,\s]/g, ""); // Replace /, \, ., ,, and spaces with an empty string
+    }
+    return value; // Return the original value if it's not a string
+  }
 
   fs.createReadStream(localCsvPath)
     .pipe(csv())
     .on("data", (row) => {
-      // Map CSV fields to MongoDB fields
+      // Map CSV fields to MongoDB fields with sanitization
       const mappedRow = {
-        VendorStockNumber: row["VendorStockNumber"],
+        VendorStockNumber: sanitizeField(row["VendorStockNumber"]),
         Shape: row["Shape"],
         Weight: row["Weight"],
         Color: row["Color"],
@@ -398,15 +422,37 @@ function processCsvAndSaveToMongo() {
         Symmetry: row["Symmetry"],
         FluorescenceIntensity: row["FluorescenceIntensity"],
         Lab: row["Lab"],
-        ROUGH_CT: row["ROUGH CT"], // Map "ROUGH CT" to "ROUGH_CT"
-        ROUGH_DATE: row["ROUGH DATE"], // Map "ROUGH DATE" to "ROUGH_DATE"
+        ROUGH_CT: row["ROUGH CT"],
+        ROUGH_DATE: row["ROUGH DATE"],
         CertificateUrl: row["Certificate Url"],
-        RoughVideo: row["Rough Video"], // Map "Rough Video" to "RoughVideo"
-        PolishedVideo: row["Polished Video"], // Map "Polished Video" to "PolishedVideo"
+        RoughVideo: row["Rough Video"],
+        PolishedVideo: row["Polished Video"],
+        StockNumber: row["StockNumber"],
+        Img: row["Img"],
+        Vid: row["Vid"],
+        SubType: row["SubType"],
+        JewelryType: row["JewelryType"],
+        Style: row["Style"],
+        Metal: row["Metal"],
+        DiaWt: row["DiaWt"],
+        DiaQty: row["DiaQty"],
+        GSQty: row["GSQty"],
+        GSWt: row["GSWt"],
+        MetalWt: row["MetalWt"],
+        MainStone: row["MainStone"],
+        SideStone: row["SideStone"],
+        SideStoneShape: row["SideStoneShape"],
+        SideStoneWt: row["SideStoneWt"],
+        SideStoneColor: row["SideStoneColor"],
+        SideClarity: row["SideClarity"],
+        Brand: row["Brand"],
+        CertNumber: row["CertNumber"],
+        Remarks: row["Remarks"],
+        MemoInvoiceDescription: row["MemoInvoiceDescription"],
+        Price: row["Price"],
+        HTMLTemplate: false, // Default value
       };
 
-      // generateHtml(mappedRow); // Generate and save the HTML template
-      mappedRow.HTMLTemplate = false;
       results.push(mappedRow);
     })
     .on("end", async () => {
@@ -429,13 +475,21 @@ function processCsvAndSaveToMongo() {
           }
         }
         const updatedList = await DiamondNew.find({});
-        callback(null, { insertedDiamonds, updatedList });
+
+        if (callback) {
+          callback(null, { insertedDiamonds, updatedList });
+        } else {
+          console.log("Callback not provided");
+        }
+
         console.log("Data processing completed");
       } catch (error) {
         console.error("Error saving data to MongoDB:", error);
+        if (callback) callback(error);
       }
     });
 }
+
 const upload = multer({ dest: "uploads/" });
 
 // Endpoint to upload and process CSV file
@@ -543,6 +597,7 @@ app.post(
       const diamonds = await DiamondNew.find({
         VendorStockNumber: { $in: vendorStockNumbers },
       }).lean();
+      console.log("diamonds:", diamonds);
 
       await generateHtmlTemplates(diamonds);
 
@@ -584,7 +639,14 @@ app.post(
 // Endpoint to trigger the FTP download and save to MongoDB
 app.post("/yerushalmi/import-diamonds", authenticateToken, (req, res) => {
   downloadLatestCsvFromFTP(() => {
-    processCsvAndSaveToMongo();
+    processCsvAndSaveToMongo((err, result) => {
+      if (err) {
+        console.error("Error processing CSV and saving to MongoDB:", err);
+        return;
+      }
+
+      console.log("CSV processing result:", result);
+    });
     res
       .status(200)
       .json({ message: "FTP download initiated and data is being processed" });

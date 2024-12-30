@@ -17,6 +17,30 @@ const diamondNewSchema = new mongoose.Schema({
   RoughVideo: { type: String },
   PolishedVideo: { type: String },
   HTMLTemplate: { type: Boolean }, // New field for storing the HTML template
+  // add new for the new diamonds
+  StockNumber: { type: String },
+  Img: { type: String },
+  Vid: { type: String },
+  JewelryType: { type: String },
+  SubType: { type: String },
+  Style: { type: String },
+  Metal: { type: String },
+  DiaWt: { type: String },
+  DiaQty: { type: String },
+  GSQty: { type: String },
+  GSWt: { type: String },
+  MetalWt: { type: String },
+  MainStone: { type: String },
+  SideStone: { type: String },
+  SideStoneShape: { type: String },
+  SideStoneWt: { type: String },
+  SideStoneColor: { type: String },
+  SideClarity: { type: String },
+  Brand: { type: String },
+  CertNumber: { type: String },
+  Remarks: { type: String },
+  MemoInvoiceDescription: { type: String },
+  Price: { type: String },
 });
 
 const DiamondNew = mongoose.model("Diamond_new", diamondNewSchema);

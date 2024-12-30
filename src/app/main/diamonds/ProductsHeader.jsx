@@ -14,11 +14,39 @@ import { saveAs } from "file-saver";
 //  */
 
 function ProductsHeader({ setTableDisabled }) {
+  const [importing, setImporting] = useState(false); // State for button disabled state
+
   const [syncMessage, setSyncMessage] = useState(""); // State for displaying sync status message
   const [snackbarOpen, setSnackbarOpen] = useState(false); // State for Snackbar visibility
   const [selectedFile, setSelectedFile] = useState(null); // State for selected file
   const [uploading, setUploading] = useState(false); // State for button disabled state
 
+  const handleImportDiamonds = async () => {
+    setImporting(true);
+    setTableDisabled(true); // Optionally disable the table
+
+    try {
+      const token = AuthService.getToken();
+      const response = await axios.post(
+        "https://server.yerushalmi.online/yerushalmi/import-diamonds",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Import response:", response.data);
+      setSyncMessage(response.data.message || "Import completed successfully");
+    } catch (error) {
+      console.error("Error importing diamonds:", error);
+      setSyncMessage("Failed to import diamonds");
+    } finally {
+      setImporting(false);
+      setTableDisabled(false); // Re-enable the table
+    }
+  };
   // Function to fetch data from the server
   const getData = async () => {
     try {
@@ -47,7 +75,7 @@ function ProductsHeader({ setTableDisabled }) {
       const token = AuthService.getToken();
 
       const response = await axios.post(
-        "https://server.yerushalmi.online/yerushalmi/upload-csv",
+        "http://localhost:5000/yerushalmi/upload-csv",
         formData,
         {
           headers: {
@@ -136,27 +164,6 @@ function ProductsHeader({ setTableDisabled }) {
       setSnackbarOpen(true);
     }
   };
-  // const handleDownloadFromFTP = async () => {
-  //   try {
-  //     const token = AuthService.getToken();
-  //     const response = await axios.get(
-  //       "http://localhost:5000/yerushalmi/download-ftp-file", // Ensure this matches the server endpoint
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //         responseType: "blob", // Ensures binary data is handled correctly
-  //       }
-  //     );
-
-  //     const blob = new Blob([response.data], {
-  //       type: "text/csv;charset=utf-8",
-  //     });
-  //     saveAs(blob, "CSV_template.csv"); // Set the downloaded file name
-  //   } catch (error) {
-  //     console.error("Error downloading CSV template from FTP:", error);
-  //   }
-  // };
 
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
   return (
@@ -230,7 +237,18 @@ function ProductsHeader({ setTableDisabled }) {
               <span className="ml-2">Download CSV Template</span>
             </a>
           </Button>
-
+          {/* Button to trigger import diamonds */}
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleImportDiamonds}
+            disabled={importing} // Disable while importing
+          >
+            <FuseSvgIcon size={20}>heroicons-outline:refresh</FuseSvgIcon>
+            <span className="mx-4 sm:mx-8">
+              {importing ? "Importing..." : "Import Diamonds"}
+            </span>
+          </Button>
           {/* <Button
             variant="contained"
             color="primary"
