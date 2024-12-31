@@ -226,8 +226,8 @@ function ProductsHeader({ setTableDisabled }) {
             }}
           >
             <a
-              href="https://www.yerushalmi.online/CSV_template.csv"
-              download="CSV_template.csv"
+              href="https://www.yerushalmi.online/CSV_template_updated.csv"
+              download="CSV_template_updated.csv"
               className="flex items-center text-white no-underline"
               style={{ color: "inherit", textDecoration: "none" }}
             >

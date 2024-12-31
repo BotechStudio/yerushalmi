@@ -291,6 +291,102 @@ function ProductsTable({ disabled }) {
         accessorKey: "Weight",
         header: "Weight",
       },
+      {
+        accessorKey: "StockNumber",
+        header: "StockNumber",
+      },
+      {
+        accessorKey: "Img",
+        header: "Img",
+      },
+      {
+        accessorKey: "Vid",
+        header: "Vid",
+      },
+      {
+        accessorKey: "JewelryType",
+        header: "JewelryType",
+      },
+      {
+        accessorKey: "SubType",
+        header: "SubType",
+      },
+      {
+        accessorKey: "Style",
+        header: "Style",
+      },
+      {
+        accessorKey: "Metal",
+        header: "Metal",
+      },
+      {
+        accessorKey: "DiaWt",
+        header: "DiaWt",
+      },
+      {
+        accessorKey: "DiaQty",
+        header: "DiaQty",
+      },
+      {
+        accessorKey: "GSQty",
+        header: "GSQty",
+      },
+      {
+        accessorKey: "GSWt",
+        header: "GSWt",
+      },
+      {
+        accessorKey: "MetalWt",
+        header: "MetalWt",
+      },
+      {
+        accessorKey: "MainStone",
+        header: "MainStone",
+      },
+      {
+        accessorKey: "SideStone",
+        header: "SideStone",
+      },
+      {
+        accessorKey: "SideStoneShape",
+        header: "SideStoneShape",
+      },
+      {
+        accessorKey: "SideStoneWt",
+        header: "SideStoneWt",
+      },
+      {
+        accessorKey: "SideStoneColor",
+        header: "SideStoneColor",
+      },
+      {
+        accessorKey: "SideClarity",
+        header: "SideClarity",
+      },
+      {
+        accessorKey: "Brand",
+        header: "Brand",
+      },
+      {
+        accessorKey: "CertNumber",
+        header: "CertNumber",
+      },
+      {
+        accessorKey: "Remarks",
+        header: "Remarks",
+      },
+      {
+        accessorKey: "MemoInvoiceDescription",
+        header: "MemoInvoiceDescription",
+      },
+      {
+        accessorKey: "Price",
+        header: "Price",
+      },
+      {
+        accessorKey: "ROUGH_DATE",
+        header: "ROUGH_DATE",
+      },
     ],
     [selectedDiamonds, disabledDiamonds]
   );

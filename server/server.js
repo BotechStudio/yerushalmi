@@ -893,7 +893,6 @@ app.post("/yerushalmi/diamonds", async (req, res) => {
 });
 
 app.get("/yerushalmi/export-diamonds", authenticateToken, async (req, res) => {
-  console.log("res", res);
   try {
     const diamonds = await DiamondNew.find({}).lean();
 
@@ -914,6 +913,28 @@ app.get("/yerushalmi/export-diamonds", authenticateToken, async (req, res) => {
       "RoughVideo",
       "PolishedVideo",
       "HTMLTemplate",
+      "StockNumber",
+      "Img",
+      "Vid",
+      "JewelryType",
+      "SubType",
+      "Style",
+      "Metal",
+      "DiaWt",
+      "GSQty",
+      "GSWt",
+      "MetalWt",
+      "MainStone",
+      "SideStone",
+      "SideStoneShape",
+      "SideStoneWt",
+      "SideStoneColor",
+      "SideClarity",
+      "Brand",
+      "CertNumber",
+      "Remarks",
+      "MemoInvoiceDescription",
+      "Price",
     ];
     const json2csvParser = new Parser({ fields });
     const csv = json2csvParser.parse(diamonds);
