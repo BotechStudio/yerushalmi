@@ -343,6 +343,10 @@ function ProductsTable({ disabled }) {
         accessorKey: "MainStone",
         header: "MainStone",
       },
+      {
+        accessorKey: "Description",
+        header: "Description",
+      },
       // {
       //   accessorKey: "SideStone",
       //   header: "SideStone",

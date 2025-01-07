@@ -338,7 +338,7 @@ app.put("/yerushalmi/diamonds/update-html-template", async (req, res) => {
 // Function to replace placeholders with actual data
 function generateHtml(data) {
   // Check if required fields are present
-  const requiredFields = ["StockNumber", "JewelryType", "Style"];
+  const requiredFields = ["StockNumber", "Img", "Description"];
   const hasRequiredFields = requiredFields.every((field) => data[field]);
 
   if (moment(data.ROUGH_DATE, "DD/MM/YYYY", true).isValid()) {
@@ -440,6 +440,7 @@ function processCsvAndSaveToMongo(callback) {
         // GSWt: row["GSWt"],
         // MetalWt: row["MetalWt"],
         MainStone: row["MainStone"],
+        Description: row["Description"],
         // SideStone: row["SideStone"],
         // SideStoneShape: row["SideStoneShape"],
         // SideStoneWt: row["SideStoneWt"],
@@ -528,6 +529,7 @@ app.post(
           Metal: row["Metal"],
           Style: row["Style"],
           DiaWt: row["DiaWt"],
+          Description: row["Description"],
         };
 
         // generateHtml(mappedRow); // Generate and save the HTML template
@@ -930,6 +932,7 @@ app.get("/yerushalmi/export-diamonds", authenticateToken, async (req, res) => {
       // "GSWt",
       // "MetalWt",
       "MainStone",
+      "Description",
       // "SideStone",
       // "SideStoneShape",
       // "SideStoneWt",
