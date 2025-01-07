@@ -338,7 +338,7 @@ app.put("/yerushalmi/diamonds/update-html-template", async (req, res) => {
 // Function to replace placeholders with actual data
 function generateHtml(data) {
   // Check if required fields are present
-  const requiredFields = ["StockNumber", "Price", "Style"];
+  const requiredFields = ["StockNumber", "JewelryType", "Style"];
   const hasRequiredFields = requiredFields.every((field) => data[field]);
 
   if (moment(data.ROUGH_DATE, "DD/MM/YYYY", true).isValid()) {
@@ -507,7 +507,7 @@ app.post(
       .on("data", (row) => {
         // Map CSV fields to MongoDB fields
         const mappedRow = {
-          VendorStockNumber: row["VendorStockNumber"],
+          VendorStockNumber: sanitizeFileName(row["VendorStockNumber"]),
           Shape: row["Shape"],
           Weight: row["Weight"],
           Color: row["Color"],
@@ -522,11 +522,16 @@ app.post(
           CertificateUrl: row["Certificate Url"],
           RoughVideo: row["Rough Video"], // Map "Rough Video" to "RoughVideo"
           PolishedVideo: row["Polished Video"], // Map "Polished Video" to "PolishedVideo"
+          StockNumber: row["StockNumber"],
+          JewelryType: row["JewelryType"],
+          MainStone: row["MainStone"],
+          Metal: row["Metal"],
+          Style: row["Style"],
+          DiaWt: row["DiaWt"],
         };
 
         // generateHtml(mappedRow); // Generate and save the HTML template
         // mappedRow.HTMLTemplate = false;
-
         results.push(mappedRow);
       })
 
