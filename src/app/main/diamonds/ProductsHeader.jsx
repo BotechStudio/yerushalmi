@@ -75,7 +75,7 @@ function ProductsHeader({ setTableDisabled }) {
       const token = AuthService.getToken();
 
       const response = await axios.post(
-        "http://localhost:5000/yerushalmi/upload-csv",
+        "https://server.yerushalmi.online/yerushalmi/upload-csv",
         formData,
         {
           headers: {
