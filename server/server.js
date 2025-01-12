@@ -246,7 +246,7 @@ function downloadLatestCsvFromFTP(callback) {
 }
 
 // Read the HTML template
-const templatePath = path.join(__dirname, "../docs/template.html");
+const templatePath = path.join(__dirname, "../docs/template_new.html");
 const template = fs.readFileSync(templatePath, "utf-8");
 // console.log("Template Path:", templatePath);
 

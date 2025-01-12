@@ -2663,6 +2663,18 @@ ul {
   display: grid;
 }
 
+.read-more-button {
+  display: none; /* Hidden by default */
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
 .image-10 {
   width: 24px;
 }
@@ -2839,6 +2851,9 @@ ul {
 
   .section-image-wrapper {
     margin-bottom: 40px;
+  }
+  .read-more-button {
+    display: block; /* Show the Read More button */
   }
 
   .cta-grid {
