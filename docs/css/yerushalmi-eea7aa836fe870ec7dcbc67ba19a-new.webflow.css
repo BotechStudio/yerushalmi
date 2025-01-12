@@ -2464,6 +2464,8 @@ ul {
   justify-content: start;
   margin-top: 0;
   display: grid;
+  width: 420px;
+  justify-items: stretch;
 }
 
 .div-block-logo {
@@ -2567,7 +2569,7 @@ ul {
 .bold-text-2 {
   text-align: left;
   text-transform: uppercase;
-  font-size: 25px;
+  font-size: 34px;
   line-height: 48px;
 }
 
@@ -2869,6 +2871,15 @@ ul {
   width: 24px;
 }
 
+.image-11{
+  width: 400px;
+}
+
+.image-12{
+width: 100%;
+}
+
+
 .div-logo {
   margin-top: 50px;
   display: flex;
@@ -2943,6 +2954,10 @@ ul {
   .section-image-wrapper {
     margin-bottom: 40px;
   }
+  .section-image-wrapper .ring {
+    margin-bottom: 480px;
+  }
+  
 
   .cta-grid {
     grid-template-rows: auto auto;
