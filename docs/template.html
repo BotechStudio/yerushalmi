@@ -184,13 +184,15 @@
           data-video-urls="videos/opening-transcode.mp4,videos/opening-transcode.webm" data-autoplay="true"
           data-loop="true" data-wf-ignore="true"
           style="-webkit-transform:translate3d(0, 0, 0) scale3d(1.4, 1.4, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(1.4, 1.4, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(1.4, 1.4, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(1.4, 1.4, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
-          class="hero-video w-background-video w-background-video-atom"><video
+          class="hero-video w-background-video w-background-video-atom">
+          <video
             id="5be3132e-478a-2e8f-9943-c2e4f649e04e-video" autoplay="" loop=""
             style="background-image:url(&quot;https://uploads-ssl.webflow.com/65f6f23e7cf5af735b91ad60%2F664fae68f5562151b3f94415_opening-poster-00001.jpg&quot;)"
             muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
             <source src="videos/opening-transcode.mp4" data-wf-ignore="true">
             <source src="videos/opening-transcode.webm" data-wf-ignore="true">
-          </video></div>
+          </video>
+        </div>
       </div>
       <div class="tint"></div>
       <div class="hero-content-container">
@@ -214,7 +216,7 @@
         <div class="w-layout-grid section-heading-grid txt-on-vid">
           <div id="w-node-new-section-title" class="grid-paragraph-wrapper">
             <div class="text-block-3">
-              <strong class="bold-text-3" style="letter-spacing: 0.05em;">The Eternal Grace - Classic <br>
+              <strong class="bold-text-2" style="letter-spacing: 0.05em;">The Eternal Grace - Classic <br>
                 Solitaire Ring</strong>
             </div>
           </div>
@@ -231,6 +233,7 @@
         </div>
         <div class="w-layout-grid section-heading-grid txt-on-vid">
           <div id="diamond-image" class="div-block-img">
+            <!-- <img src="../docs/assets//images/diamondCheck.jpg" alt="Jewelry Image" style="width: 100%; max-width: 500px; display: block; margin: 0 auto;" /> -->
             <img src="${diamond.Img}" alt="Jewelry Image" style="width: 100%; max-width: 500px; display: block; margin: 0 auto;" />
           </div>
         </div>
@@ -243,16 +246,23 @@
           </div>
           <button id="read-more-button" class="read-more-button">Read More ...</button>
         </div>
+
+
         
+      
+
         <div class="div-block-4" style="margin-bottom: -20px;">
           <div class="div-block-6">
             <div class="html-embed w-embed w-iframe">
               <div id="jewelry-video-container">
-                <iframe width="auto" height="350px" allowfullscreen="true" style="display: none; margin: 0 auto; border: 0 none;"
-                  src="${diamond.Video}&btn=0&z=0&zoomslide=0&sm=0&isBorderRadius=0"></iframe>
+                <img src="../docs/assets//images/yerushalmi_pic_new.jpg"  style="width: 1200px;" />
+                <!-- <iframe width="auto" height="350px" allowfullscreen="true" style="display: none; margin: 0 auto; border: 0 none;"
+                  src="${diamond.Video}&btn=0&z=0&zoomslide=0&sm=0&isBorderRadius=0"></iframe> -->
               </div>
             </div>
+            <div class="tint"></div>
           </div>
+          
         </div>
       </div>
     </section>
@@ -288,7 +298,7 @@
       height: 234px;
       box-shadow: 0 0 0 120px rgba(0, 0, 0, .99999);
     "></div>
-              <!-- <script>
+              <script>
                 // Function to validate URLs using a HEAD request
                 async function isValidURL(url) {
                   try {
@@ -340,7 +350,7 @@
   }
 });
 
-              </script> -->
+              </script>
 
               <div id="polished-video-container"> <iframe width="auto" height="350px" allowfullscreen="true" style="display: none; margin:0 auto;
       border:0 none;" src="${diamond.PolishedVideo}&btn=0&z=0&zoomslide=0&sm=0&isBorderRadius=0">
@@ -593,10 +603,14 @@
             </div>
           </div>
         </div>
-        <div id="w-node-_3b1461f1-d10e-eedb-fd8f-a1243803336b-1da6b293" class="div-block-9">
-          <div class="paragraph-1">On <b>${diamond.ROUGH_DATE}</b>, this <b>${diamond.ROUGH_CT} Ct</b> rough diamond was
-            discovered in the heart of <b>Botswana’s rich earth</b>,<br>offering a promise of a unique, one-of-a-kind
-            beauty.</div>
+        <div id="w-node-_3b1461f1-d10e-eedb-fd8f-a1243803336b-1da6b293">
+          <div class="paragraph-1">On
+             <b>${diamond.ROUGH_DATE}</b>,
+              this <b>${diamond.ROUGH_CT} Ct</b>
+               rough diamond was discovered in the heart of
+                <b>Botswana’s rich earth</b>
+                ,
+                <br>offering a promise of a unique, one-of-a-kind beauty.</div>
         </div>
       </div>
     </section>
