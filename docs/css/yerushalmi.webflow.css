@@ -2632,7 +2632,13 @@ ul {
   margin-top: -30px;
   margin-right: 0;
 }
+#certificateLink {
+  display: inline-block; /* Ensure the link still occupies space when the image is hidden */
+}
 
+#certificateLink.hidden {
+  display: none; /* Completely hide the link if invalid */
+}
 .div-block-9.ring {
   grid-column-gap: 60px;
   grid-row-gap: 60px;

@@ -357,21 +357,18 @@
   const diamond = {
     PolishedVideo: "https://example.com/polished-video.mp4", // Replace with actual video URL
     RoughVideo: "https://example.com/rough-video.mp4", // Replace with actual video URL
-    CertificateUrl: "", // Example certificate URL (empty in this case)
-    Img: "https://example.com/diamond-image.jpg", // Replace with actual image URL
-    Video: "https://example.com/jewelry-video.mp4", // Replace with actual video URL
+    CertificateUrl: "", // Example certificate URL (empty or invalid)
   };
 
-   // Adjust opacity for the GIA logo if the certificate URL is not valid
-   async function handleGIACertificateLogo() {
+    // Adjust visibility for the GIA logo based on the certificate URL
+    async function handleGIACertificateLogo() {
     const certificateLink = document.getElementById('certificateLink');
     const certificateImg = document.getElementById('certificateImg');
 
     if (!(await isValidURL(diamond.CertificateUrl))) {
-      certificateLink.removeAttribute('href'); // Remove the link
-      certificateImg.style.opacity = '0.5'; // Set reduced opacity
+        certificateLink.classList.add('hidden'); // Add the 'hidden' class to hide the link and image
     }
-  }
+}
 
   // Call the function for each video
   renderVideo('polished-video-container', diamond.PolishedVideo);
@@ -379,10 +376,8 @@
   renderVideo('diamond-image', diamond.Img);
   renderVideo('jewelry-video-container', diamond.Video);
  // Adjust the GIA logo opacity based on the certificate URL
- document.addEventListener('DOMContentLoaded', async () => {
+ document.addEventListener('DOMContentLoaded',  () => {
     console.log('DOM fully loaded and parsed');
-    await handleGIACertificateLogo();
-
     const button = document.getElementById('read-more-button');
     if (!button) return;
 
@@ -394,6 +389,12 @@
       hiddenParagraph.style.display = isVisible ? 'none' : 'block';
       this.textContent = isVisible ? 'Read More' : 'Show Less';
     });
+ // Execute the function after the DOM is fully loaded
+ document.addEventListener('DOMContentLoaded', async () => {
+    await handleGIACertificateLogo();
+  });
+
+
   });
 </script>
 
