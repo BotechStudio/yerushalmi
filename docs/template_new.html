@@ -356,52 +356,45 @@
   // Example diamond object
   const diamond = {
     PolishedVideo: "https://example.com/polished-video.mp4", // Replace with actual video URL
-    RoughVideo: "https://example.com/rough-video.mp4" // Replace with actual video URL
+    RoughVideo: "https://example.com/rough-video.mp4", // Replace with actual video URL
+    CertificateUrl: "", // Example certificate URL (empty in this case)
+    Img: "https://example.com/diamond-image.jpg", // Replace with actual image URL
+    Video: "https://example.com/jewelry-video.mp4", // Replace with actual video URL
   };
+
+   // Adjust opacity for the GIA logo if the certificate URL is not valid
+   async function handleGIACertificateLogo() {
+    const certificateLink = document.getElementById('certificateLink');
+    const certificateImg = document.getElementById('certificateImg');
+
+    if (!(await isValidURL(diamond.CertificateUrl))) {
+      certificateLink.removeAttribute('href'); // Remove the link
+      certificateImg.style.opacity = '0.5'; // Set reduced opacity
+    }
+  }
 
   // Call the function for each video
   renderVideo('polished-video-container', diamond.PolishedVideo);
   renderVideo('rough-video-container', diamond.RoughVideo);
   renderVideo('diamond-image', diamond.Img);
   renderVideo('jewelry-video-container', diamond.Video);
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM fully loaded and parsed"); // Log when the DOM is ready
+ // Adjust the GIA logo opacity based on the certificate URL
+ document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOM fully loaded and parsed');
+    await handleGIACertificateLogo();
 
-    const button = document.getElementById("read-more-button");
-    console.log("Button element:", button); // Log the button element
+    const button = document.getElementById('read-more-button');
+    if (!button) return;
 
-    if (!button) {
-        console.error("Error: Button element not found!"); // Log if the button is missing
-        return; // Stop further execution if button is not found
-    }
+    const hiddenParagraph = document.querySelector('.paragraph-1-copy.second');
+    if (!hiddenParagraph) return;
 
-    const hiddenParagraph = document.querySelector(".paragraph-1-copy.second");
-    console.log("Hidden paragraph element:", hiddenParagraph); // Log the hidden paragraph
-
-    if (!hiddenParagraph) {
-        console.error("Error: Hidden paragraph element not found!"); // Log if the paragraph is missing
-        return; // Stop further execution if the paragraph is not found
-    }
-
-    button.addEventListener("click", function () {
-        console.log("Button clicked"); // Log when the button is clicked
-
-        const isVisible = hiddenParagraph.style.display === "block";
-        console.log("Is paragraph visible?", isVisible); // Log the visibility status of the paragraph
-
-        if (!isVisible) {
-            hiddenParagraph.style.display = "block";
-            this.textContent = "Show Less";
-            console.log("Paragraph shown, button text updated to 'Show Less'"); // Log when the paragraph is shown
-        } else {
-            hiddenParagraph.style.display = "none";
-            this.textContent = "Read More";
-            console.log("Paragraph hidden, button text updated to 'Read More'"); // Log when the paragraph is hidden
-        }
+    button.addEventListener('click', function () {
+      const isVisible = hiddenParagraph.style.display === 'block';
+      hiddenParagraph.style.display = isVisible ? 'none' : 'block';
+      this.textContent = isVisible ? 'Read More' : 'Show Less';
     });
-});
-
-
+  });
 </script>
 
               <iframe width="auto" height="350px" allowfullscreen="true" style="display:static; margin:0 auto;
@@ -427,10 +420,10 @@
           <a href="https://www.tracr.com/#:~:text=Tracr%E2%84%A2%20is%20the%20world's,along%20the%20diamond%20value%20chain." target="_blank">
               <img src="images/logo-tracer-new.png" loading="lazy" alt="" class="image-13">
           </a>
-          <a href="${diamond.CertificateUrl}" target="_blank">
-              <img src="images/GIA_Logo_CMYK_tran.png" loading="lazy" alt="" class="image-13">
+          <a id="certificateLink" href="${diamond.CertificateUrl}" target="_blank">
+              <img id="certificateImg" src="images/GIA_Logo_CMYK_tran.png" loading="lazy" alt="" class="image-13">
           </a>
-      </div>      
+      </div>     
       </div>
     </section>
     <section id="section-polished" class="section more-info-section sec-3">

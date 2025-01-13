@@ -12,7 +12,7 @@ const diamondNewSchema = new mongoose.Schema({
   FluorescenceIntensity: { type: String },
   Lab: { type: String },
   ROUGH_CT: { type: String },
-  ROUGH_DATE: { type: String },
+  ROUGH_DATE: { type: Date },
   ROUGH_WEIGHT: { type: String },
   CertificateUrl: { type: String },
   RoughVideo: { type: String },

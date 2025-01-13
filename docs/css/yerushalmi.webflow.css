@@ -2720,7 +2720,12 @@ ul {
 }
 
 .image-13 {
+  transition: opacity 0.3s ease;
   width: 210px;
+}
+
+.image-13:hover {
+  opacity: 1;
 }
 
 .paragraph-5 {
