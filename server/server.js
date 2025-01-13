@@ -95,8 +95,14 @@ async function generateHtmlTemplates(diamonds) {
       // Add file path to the list of files to add to git
       filesToAdd.push(htmlFilePath);
 
-      // Update HTMLTemplate field to true
-      await DiamondNew.updateOne({ _id: diamond._id }, { HTMLTemplate: true });
+      // Update HTMLTemplate field to true and set the GenerateDate
+      await DiamondNew.updateOne(
+        { _id: diamond._id },
+        {
+          HTMLTemplate: true,
+          GenerateDate: new Date(), // Set GenerateDate to current date and time
+        }
+      );
     }
   }
 

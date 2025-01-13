@@ -36,6 +36,7 @@ const diamondNewSchema = new mongoose.Schema({
   Header: { type: String },
   Main: { type: String },
   Secondary: { type: String },
+  GenerateDate: { type: Date },
   // SideStone: { type: String },
   // SideStoneShape: { type: String },
   // SideStoneWt: { type: String },

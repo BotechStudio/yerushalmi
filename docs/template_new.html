@@ -186,12 +186,12 @@
           </div>
           <div class="paragraph-1-copy second">${diamond.Secondary}</div>
           <!-- <a href="#" class="link">Read more...</a> -->
-          <button id="read-more-button" class="read-more-button">Read More ...</button>
+          <button id="read-more-button" class="read-more-button">Read More</button>
         </div>
         
         <!-- <div class="section-image-wrapper ring"><img src="images/img25.jpg" loading="lazy" sizes="100vw" srcset="images/img25-p-500.jpg 500w, images/img25.jpg 765w" alt="" class="image-12"> -->
           <div class="image-animation-mask"></div>
-          <div class="tint"></div>
+          <!-- <div class="tint"></div> -->
         </div>
         <div class="styles---glowing-button w-embed">
           <style>
@@ -365,19 +365,42 @@
   renderVideo('diamond-image', diamond.Img);
   renderVideo('jewelry-video-container', diamond.Video);
   document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("read-more-button").addEventListener("click", function () {
-        const leftParagraph = document.querySelector(".second");
-        const isVisible = leftParagraph.style.display === "block";
+    console.log("DOM fully loaded and parsed"); // Log when the DOM is ready
+
+    const button = document.getElementById("read-more-button");
+    console.log("Button element:", button); // Log the button element
+
+    if (!button) {
+        console.error("Error: Button element not found!"); // Log if the button is missing
+        return; // Stop further execution if button is not found
+    }
+
+    const hiddenParagraph = document.querySelector(".paragraph-1-copy.second");
+    console.log("Hidden paragraph element:", hiddenParagraph); // Log the hidden paragraph
+
+    if (!hiddenParagraph) {
+        console.error("Error: Hidden paragraph element not found!"); // Log if the paragraph is missing
+        return; // Stop further execution if the paragraph is not found
+    }
+
+    button.addEventListener("click", function () {
+        console.log("Button clicked"); // Log when the button is clicked
+
+        const isVisible = hiddenParagraph.style.display === "block";
+        console.log("Is paragraph visible?", isVisible); // Log the visibility status of the paragraph
 
         if (!isVisible) {
-            leftParagraph.style.display = "block";
+            hiddenParagraph.style.display = "block";
             this.textContent = "Show Less";
+            console.log("Paragraph shown, button text updated to 'Show Less'"); // Log when the paragraph is shown
         } else {
-            leftParagraph.style.display = "none";
+            hiddenParagraph.style.display = "none";
             this.textContent = "Read More";
+            console.log("Paragraph hidden, button text updated to 'Read More'"); // Log when the paragraph is hidden
         }
     });
 });
+
 
 </script>
 

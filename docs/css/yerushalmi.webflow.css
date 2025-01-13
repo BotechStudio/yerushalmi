@@ -2853,7 +2853,7 @@ ul {
     margin-bottom: 40px;
   }
   .read-more-button {
-    display: block; /* Show the Read More button */
+    display: block; /* Ensure it is visible */
   }
 
   .cta-grid {
@@ -3540,7 +3540,7 @@ ul {
   }
 
   .paragraph-1-copy.second {
-    display: none;
+    display: none; /* Ensure it starts hidden */
   }
 
   .paragraph-1-copy-copy {
