@@ -326,6 +326,16 @@
       box-shadow: 0 0 0 120px rgba(0, 0, 0, .99999);
     "></div>
  <script>
+    // Hide the element when the page loads
+    window.onload = async function () {
+  const certificateLink = document.getElementById('certificateLink');
+  const certificateImg = document.getElementById('certificateImg');
+
+  if (!(await isValidURL(diamond.CertificateUrl))) {
+    certificateLink.style.display = "none"; // Hide the link and image by reducing opacity
+  }
+};
+
   // Function to validate URLs using a HEAD request
   async function isValidURL(url) {
     try {
@@ -364,9 +374,10 @@
     async function handleGIACertificateLogo() {
     const certificateLink = document.getElementById('certificateLink');
     const certificateImg = document.getElementById('certificateImg');
-
+    certificateLink.style.opacity = 0;
     if (!(await isValidURL(diamond.CertificateUrl))) {
-        certificateLink.classList.add('hidden'); // Add the 'hidden' class to hide the link and image
+     
+     
     }
 }
 
@@ -389,10 +400,11 @@
       hiddenParagraph.style.display = isVisible ? 'none' : 'block';
       this.textContent = isVisible ? 'Read More' : 'Show Less';
     });
- // Execute the function after the DOM is fully loaded
- document.addEventListener('DOMContentLoaded', async () => {
-    await handleGIACertificateLogo();
-  });
+//  // Execute the function after the DOM is fully loaded
+//  document.addEventListener('DOMContentLoaded', async () => {
+//   console.log("im here 2 ")
+//     await handleGIACertificateLogo();
+//   });
 
 
   });
