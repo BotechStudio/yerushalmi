@@ -370,17 +370,6 @@
     CertificateUrl: "", // Example certificate URL (empty or invalid)
   };
 
-    // Adjust visibility for the GIA logo based on the certificate URL
-    async function handleGIACertificateLogo() {
-    const certificateLink = document.getElementById('certificateLink');
-    const certificateImg = document.getElementById('certificateImg');
-    certificateLink.style.opacity = 0;
-    if (!(await isValidURL(diamond.CertificateUrl))) {
-     
-     
-    }
-}
-
   // Call the function for each video
   renderVideo('polished-video-container', diamond.PolishedVideo);
   renderVideo('rough-video-container', diamond.RoughVideo);
@@ -400,13 +389,6 @@
       hiddenParagraph.style.display = isVisible ? 'none' : 'block';
       this.textContent = isVisible ? 'Read More' : 'Show Less';
     });
-//  // Execute the function after the DOM is fully loaded
-//  document.addEventListener('DOMContentLoaded', async () => {
-//   console.log("im here 2 ")
-//     await handleGIACertificateLogo();
-//   });
-
-
   });
 </script>
 
