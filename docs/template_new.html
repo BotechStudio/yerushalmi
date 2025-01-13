@@ -364,17 +364,19 @@
   renderVideo('rough-video-container', diamond.RoughVideo);
   renderVideo('diamond-image', diamond.Img);
   renderVideo('jewelry-video-container', diamond.Video);
-  document.getElementById("read-more-button").addEventListener("click", function () {
-const leftParagraph = document.querySelector(".second");
-const isVisible = leftParagraph.style.display === "block";
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("read-more-button").addEventListener("click", function () {
+        const leftParagraph = document.querySelector(".second");
+        const isVisible = leftParagraph.style.display === "block";
 
-if (!isVisible) {
-leftParagraph.style.display = "block";
-this.textContent = "Show Less";
-} else {
-leftParagraph.style.display = "none";
-this.textContent = "Read More";
-}
+        if (!isVisible) {
+            leftParagraph.style.display = "block";
+            this.textContent = "Show Less";
+        } else {
+            leftParagraph.style.display = "none";
+            this.textContent = "Read More";
+        }
+    });
 });
 
 </script>
