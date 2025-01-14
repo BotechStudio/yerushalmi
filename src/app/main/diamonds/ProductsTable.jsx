@@ -300,8 +300,8 @@ function ProductsTable({ disabled }) {
         header: "Img",
       },
       {
-        accessorKey: "Vid",
-        header: "Vid",
+        accessorKey: "JewleryVideo",
+        header: "JewleryVideo",
       },
       {
         accessorKey: "JewelryType",
@@ -343,9 +343,25 @@ function ProductsTable({ disabled }) {
         accessorKey: "MainStone",
         header: "MainStone",
       },
+      // {
+      //   accessorKey: "Description",
+      //   header: "Description",
+      // },
       {
-        accessorKey: "Description",
-        header: "Description",
+        accessorKey: "Header",
+        header: "Header",
+      },
+      {
+        accessorKey: "Main",
+        header: "Main",
+      },
+      {
+        accessorKey: "Secondary",
+        header: "Secondary",
+      },
+      {
+        accessorKey: "GenerateDate",
+        header: "GenerateDate",
       },
       // {
       //   accessorKey: "SideStone",
@@ -387,10 +403,10 @@ function ProductsTable({ disabled }) {
       //   accessorKey: "Price",
       //   header: "Price",
       // },
-      {
-        accessorKey: "ROUGH_DATE",
-        header: "ROUGH_DATE",
-      },
+      // {
+      //   accessorKey: "ROUGH_DATE",
+      //   header: "ROUGH_DATE",
+      // },
     ],
     [selectedDiamonds, disabledDiamonds]
   );
