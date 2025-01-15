@@ -366,8 +366,8 @@ function generateHtml(data) {
   if (hasRequiredFields) {
     console.log("hey hey");
     html = html.replace(
-      '<section id="additional-diamond-info" class="section more-info-section" style="display: none;">',
-      '<section id="additional-diamond-info" class="section more-info-section">'
+      '<section id="section-polished" class="section more-info-section first" style="display: none;">',
+      '<section id="section-polished" class="section more-info-section first">'
     );
   }
 
