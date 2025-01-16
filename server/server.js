@@ -75,7 +75,7 @@ async function generateHtmlTemplates(diamonds) {
 
   for (const diamond of diamonds) {
     // Generate HTML if not already present or is false
-    if (!diamond.HTMLTemplate || diamond.HTMLTemplate === false) {
+    if (!diamond.HTMLTemplate || diamond.HTMLTemplate === false || true) {
       console.log("diamond:", diamond);
       const htmlContent = generateHtml(diamond);
 
@@ -106,19 +106,20 @@ async function generateHtmlTemplates(diamonds) {
     }
   }
 
-  if (filesToAdd.length > 0) {
-    try {
-      // Stage all the new files
-      await git.add(filesToAdd);
-      // Commit the changes
-      await git.commit("Add HTML templates");
-      // Push the changes
-      await git.push("origin", "main");
-    } catch (gitError) {
-      console.error("Error during git operations:", gitError);
-      throw new Error("Git operations failed: " + gitError.message);
-    }
-  }
+  //TODO: revert
+  // if (filesToAdd.length > 0) {
+  //   try {
+  //     // Stage all the new files
+  //     await git.add(filesToAdd);
+  //     // Commit the changes
+  //     await git.commit("Add HTML templates");
+  //     // Push the changes
+  //     await git.push("origin", "main");
+  //   } catch (gitError) {
+  //     console.error("Error during git operations:", gitError);
+  //     throw new Error("Git operations failed: " + gitError.message);
+  //   }
+  // }
 }
 
 // Function to download CSV file from FTP and save locally

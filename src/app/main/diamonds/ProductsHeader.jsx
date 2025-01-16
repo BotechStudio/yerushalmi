@@ -211,10 +211,6 @@ function ProductsHeader({ setTableDisabled }) {
             <FuseSvgIcon size={20}>heroicons-outline:download</FuseSvgIcon>
             <span className="mx-4 sm:mx-8">Export Table</span>
           </Button>
-        </div>
-
-        {/* Second Row: Download CSV Template */}
-        <div className="flex flex-row items-center justify-end">
           <Button
             variant="contained"
             color="primary"
@@ -249,14 +245,6 @@ function ProductsHeader({ setTableDisabled }) {
               {importing ? "Importing..." : "Import Diamonds"}
             </span>
           </Button>
-          {/* <Button
-            variant="contained"
-            color="primary"
-            onClick={handleUpdateChanges}
-          >
-            <FuseSvgIcon size={20}>heroicons-outline:refresh</FuseSvgIcon>
-            <span className="mx-4 sm:mx-8">Update Changes</span>
-          </Button> */}
         </div>
       </div>
     </div>
