@@ -106,7 +106,6 @@ async function generateHtmlTemplates(diamonds) {
     }
   }
 
-  TODO: revert
   if (filesToAdd.length > 0) {
     try {
       // Stage all the new files
