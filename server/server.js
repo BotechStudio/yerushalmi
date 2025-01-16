@@ -71,6 +71,8 @@ wss.on("connection", (ws) => {
 const localCsvPath = path.join(__dirname, "/data_ftp/data_new.csv"); // Ensure the file is saved in the current directory
 
 async function generateHtmlTemplates(diamonds) {
+  console.log("start to generate...");
+
   const filesToAdd = [];
 
   for (const diamond of diamonds) {
