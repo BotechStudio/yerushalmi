@@ -81,22 +81,36 @@
                 background-color: gainsboro;
                 border-radius: 100%;
                 display: inline-block;
+                -webkit-animation: fuse-bouncedelay 1s infinite ease-in-out both;
                 animation: fuse-bouncedelay 1s infinite ease-in-out both;
             }
 
             #spinner .bounce1 {
+                -webkit-animation-delay: -0.32s;
                 animation-delay: -0.32s;
             }
 
            #spinner .bounce2 {
+                -webkit-animation-delay: -0.16s;
                 animation-delay: -0.16s;
+            }
+
+            @-webkit-keyframes fuse-bouncedelay {
+                0%, 80%, 100% {
+                    -webkit-transform: scale(0)
+                }
+                40% {
+                    -webkit-transform: scale(1.0)
+                }
             }
 
             @keyframes fuse-bouncedelay {
                 0%, 80%, 100% {
+                    -webkit-transform: scale(0);
                     transform: scale(0);
                 }
                 40% {
+                    -webkit-transform: scale(1.0);
                     transform: scale(1.0);
                 }
             }
@@ -104,8 +118,6 @@
 
         </style>
         <!-- / FUSE Splash Screen CSS -->
-      <script type="module" crossorigin src="/assets/index-I03iUAhP.js"></script>
-      <link rel="stylesheet" crossorigin href="/assets/index-hjfMnnv1.css">
     </head>
     <body>
 
@@ -127,6 +139,7 @@
         </div>
         <!-- / FUSE Splash Screen -->
     </div>
+    <script type="module" src="/src/index.jsx"></script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

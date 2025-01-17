@@ -93,7 +93,7 @@ function ProductsTable({ disabled }) {
     try {
       const token = AuthService.getToken();
       const response = await axios.post(
-        "htpps://server.yerushalmi.online/yerushalmi/diamond/generateHtmlTemplates",
+        "http://localhost:5000/yerushalmi/diamond/generateHtmlTemplates",
         { vendorStockNumbers: diamonds },
         {
           headers: {
@@ -127,7 +127,7 @@ function ProductsTable({ disabled }) {
       const token = AuthService.getToken();
 
       const response = await axios.delete(
-        "htpps://server.yerushalmi.online/yerushalmi/diamonds/byVendorStockNumber",
+        "http://localhost:5000/yerushalmi/diamonds/byVendorStockNumber",
         {
           headers: {
             Authorization: `Bearer ${token}`,
