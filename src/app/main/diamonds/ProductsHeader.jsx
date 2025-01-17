@@ -28,7 +28,7 @@ function ProductsHeader({ setTableDisabled }) {
     try {
       const token = AuthService.getToken();
       const response = await axios.post(
-        "http://https://server.yerushalmi.online/yerushalmi/import-diamonds",
+        "https://server.yerushalmi.online/yerushalmi/import-diamonds",
         {},
         {
           headers: {
@@ -75,7 +75,7 @@ function ProductsHeader({ setTableDisabled }) {
       const token = AuthService.getToken();
 
       const response = await axios.post(
-        "http://https://server.yerushalmi.online/yerushalmi/upload-csv",
+        "https://server.yerushalmi.online/yerushalmi/upload-csv",
         formData,
         {
           headers: {
@@ -109,7 +109,7 @@ function ProductsHeader({ setTableDisabled }) {
     try {
       const token = AuthService.getToken();
       const response = await axios.get(
-        "http://https://server.yerushalmi.online/yerushalmi/export-diamonds",
+        "https://server.yerushalmi.online/yerushalmi/export-diamonds",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -131,7 +131,7 @@ function ProductsHeader({ setTableDisabled }) {
     try {
       const token = AuthService.getToken();
       const response = await axios.post(
-        "http://https://server.yerushalmi.online/yerushalmi/diamond/update-changes",
+        "https://server.yerushalmi.online/yerushalmi/diamond/update-changes",
         {},
         {
           headers: {
