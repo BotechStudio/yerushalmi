@@ -39,23 +39,24 @@
       padding: 60px 0;
       overflow: hidden;
     }
+    
   
     .iframe-wrapper iframe {
       width: 100%;
-      max-width: 268px;
-      height: 264px;
+      height: 220px;
+      max-width: 100%;
       border: none;
+    }
+
+    .iframe-wrapper iframe .flexbox {
+      overflow: hidden;
     }
   
     @media (max-width: 480px) {
       .iframe-wrapper {
         padding: 30px 0;
       }
-  
-      .iframe-wrapper iframe {
-        height: 220px;
-        max-width: 100%;
-      }
+
     }
   </style>
   
