@@ -30,23 +30,34 @@
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
   <style>
-    @media (max-width: 480px) {
-      .iframe-wrapper {
-      display: flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-      max-width: 100% !important;
-      height: auto !important;
-      padding: 30px 0 !important;
-      overflow: hidden !important;
+    .iframe-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 100%;
+      height: auto;
+      padding: 60px 0;
+      overflow: hidden;
     }
 
+    
+  
     .iframe-wrapper iframe {
-      width: 100% !important;
-      height: 220px !important;
-      max-width: 100% !important;
-      border: none !important;
+      width: 100%;
+      height: 220px;
+      max-width: 100%;
+      border: none;
     }
+
+    .iframe-wrapper iframe html {
+      overflow: hidden;
+    }
+  
+    @media (max-width: 480px) {
+      .iframe-wrapper {
+        padding: 30px 0;
+      }
+
     }
   </style>
   
@@ -610,30 +621,14 @@
           </div>
         </div>
         <div id="w-node-_8a31fb89-f847-1be8-c3a5-ee11eecf8966-5b91ada2" class="div-block-4 rough">
-          <div class="div-block-4 ring iframe-wrapper" style="justify-content: center;
-          align-items: center;
-          height: 130px;
-          max-width: 160px;
-          margin-top: 60px;
-          align-self: center;
-          margin-bottom: 60px;
-          display: flex;
-          overflow: hidden;">
-            <iframe width="auto" height="350px" allowfullscreen="true" style="
-             justify-content: center;
-    align-items: center;
-    height: 264px;
-    max-width: 268px;
-    margin-left: 13px;
-    margin-top: 170px;
-    align-self: center;
-    margin-bottom: 60px;
-    display: flex;
-    overflow: hidden;" src="https://v360.in/diamondview.aspx?cid=YBDB&d=L47059&btn=0&z=0&zoomslide=0&sm=0&isBorderRadius=0">
-            </iframe>
+          <div class="div-block-4 ring iframe-wrapper">
+            <iframe
+              allowfullscreen
+              src="https://v360.in/diamondview.aspx?cid=YBDB&d=L47059&btn=0&z=0&zoomslide=0&sm=0&isBorderRadius=0"
+            ></iframe>
             <div class="div-block-6"></div>
           </div>
-        </div>
+          </div>
         </div>
         <div id="w-node-_3b1461f1-d10e-eedb-fd8f-a1243803336b-5b91ada2" class="div-block-9 rough">
           <div class="paragraph-1">On 45485 <strong>3.55</strong> rough diamond was
